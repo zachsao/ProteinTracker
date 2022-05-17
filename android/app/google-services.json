@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "509089469622",
+    "project_id": "protein-tracker-68a13",
+    "storage_bucket": "protein-tracker-68a13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509089469622:android:46c5519ae7aeccca6c8217",
+        "android_client_info": {
+          "package_name": "com.example.protein_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509089469622-7up0jqpmfkun017i37eeh3mrq4gr5lr5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOn-Xvl2fIqFGlIbLmv6pM76AMLC6BhdQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509089469622-7up0jqpmfkun017i37eeh3mrq4gr5lr5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "509089469622-dro2c68afk1etdfq6q5i0s7nqac40nur.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.proteinTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
