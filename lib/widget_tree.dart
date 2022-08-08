@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/auth.dart';
+import 'package:protein_tracker/home/home_page.dart';
 import 'package:protein_tracker/login/login_page.dart';
 
 class WidgetTree extends StatelessWidget {
@@ -12,7 +13,7 @@ class WidgetTree extends StatelessWidget {
       stream: Auth().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const Center(child: Text("This is the home page"),);
+          return const HomePage();
         } else {
           return const LoginPage();
         }
