@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/auth.dart';
+import '../peachy_fab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,23 +9,43 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Hello, ${Auth().currentUser?.displayName}"),
-          ElevatedButton(
-              onPressed: () => _handleSignOut(), child: const Text("Sign out")),
-        ],
-      ),
-    );
+  int selectedIndex = 0;
+
+  void _onItemTap(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
-  void _handleSignOut() {
-    setState(() {
-      Auth().signOut();
-    });
+  @override
+  Widget build(BuildContext context) {
+    const bottomBarItems = [
+      BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.list_alt_outlined), label: "Chart"),
+    ];
+
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: const[],
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: const PeachyFab(),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _onItemTap,
+        currentIndex: selectedIndex,
+        items: bottomBarItems,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+      ),
+    );
   }
 }
