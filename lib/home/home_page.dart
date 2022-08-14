@@ -32,7 +32,7 @@ class HomeState extends State<HomePage> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
-              children: const[],
+              children: const [],
             ),
           ),
         ),
