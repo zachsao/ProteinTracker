@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/home/screen.dart';
 import '../peachy_fab.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,11 +20,10 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const bottomBarItems = [
-      BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.list_alt_outlined), label: "Chart"),
-    ];
+    List<BottomNavigationBarItem> bottomBarItems =
+        Screen.screens().map((screen) {
+      return BottomNavigationBarItem(icon: Icon(screen.icon), label: screen.label);
+    }).toList();
 
     return Scaffold(
       body: SafeArea(
@@ -31,9 +31,7 @@ class HomeState extends State<HomePage> {
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: const [],
-            ),
+            child: Screen.screens()[selectedIndex].content,
           ),
         ),
       ),
