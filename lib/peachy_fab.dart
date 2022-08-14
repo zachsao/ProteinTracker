@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/firestore.dart';
 import 'package:protein_tracker/models/meal.dart';
 
 class PeachyFab extends StatefulWidget {
@@ -14,7 +15,7 @@ class _PeachyFabState extends State<PeachyFab> {
   late TextEditingController _nameController;
   late TextEditingController _amountController;
 
-  String dropdownValue = MealType.values.first.name;
+  MealType dropdownValue = MealType.values.first;
 
   @override
   void initState() {
@@ -30,10 +31,17 @@ class _PeachyFabState extends State<PeachyFab> {
     super.dispose();
   }
 
-  void onTypeChanged(String? value) {
+  void onTypeChanged(MealType? value) {
     setState(() {
       dropdownValue = value!;
     });
+  }
+
+  void addFood() async {
+    print(_amountController.text);
+    Food food = Food(name: _nameController.text, amount: int.parse(_amountController.text), type: dropdownValue);
+    print(food);
+    await FirestoreService().addFood(food);
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
@@ -58,6 +66,7 @@ class _PeachyFabState extends State<PeachyFab> {
                 ),
                 TextField(
                   controller: _amountController,
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     labelText: "Protein amount (g)",
@@ -67,7 +76,7 @@ class _PeachyFabState extends State<PeachyFab> {
                   height: 16,
                 ),
                 StatefulBuilder(builder: (context, dropdownState) {
-                  return DropdownButtonFormField(
+                  return DropdownButtonFormField<MealType>(
                       isExpanded: true,
                       value: dropdownValue,
                       decoration: const InputDecoration(
@@ -75,11 +84,11 @@ class _PeachyFabState extends State<PeachyFab> {
                       ),
                       items: MealType.values.map((MealType type) {
                         return DropdownMenuItem(
-                          value: type.name,
+                          value: type,
                           child: Text(type.name),
                         );
                       }).toList(),
-                      onChanged: (String? value) {
+                      onChanged: (MealType? value) {
                         dropdownState(() {
                           dropdownValue = value!;
                         });
@@ -98,6 +107,7 @@ class _PeachyFabState extends State<PeachyFab> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
+                addFood();
                 Navigator.of(context).pop();
               },
             ),
