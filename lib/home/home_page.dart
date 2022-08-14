@@ -15,8 +15,7 @@ class HomeState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-              "Hello, ${Auth().currentUser?.displayName ?? Auth().currentUser?.email}"),
+          Text("Hello, ${Auth().currentUser?.displayName}"),
           ElevatedButton(
               onPressed: () => _handleSignOut(), child: const Text("Sign out")),
         ],
