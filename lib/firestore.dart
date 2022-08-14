@@ -17,4 +17,14 @@ class FirestoreService {
         )
         .add(food);
   }
+
+  Stream<QuerySnapshot<Food>> getFoods() {
+    return _firestore
+        .collection("foods")
+        .withConverter(
+          fromFirestore: Food.fromFirestore,
+          toFirestore: ((Food food, options) => food.toFirestore()),
+        )
+        .snapshots();
+  }
 }
