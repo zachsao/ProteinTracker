@@ -38,6 +38,7 @@ dependencies:
   firebase_auth: ^3.6.2
   google_sign_in: ^5.4.0
   cloud_firestore: ^3.4.3
+  gradient_widgets: ^0.6.0
 
 dev_dependencies:
   flutter_test:

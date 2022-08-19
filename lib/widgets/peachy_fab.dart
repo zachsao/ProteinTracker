@@ -51,7 +51,7 @@ class _PeachyFabState extends State<PeachyFab> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add an item'),
+          title: Text('Add an item', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

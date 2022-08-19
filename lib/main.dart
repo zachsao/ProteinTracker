@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:protein_tracker/color_schemes.g.dart';
 import 'package:protein_tracker/firebase_options.dart';
 import 'package:protein_tracker/widget_tree.dart';
 
@@ -16,7 +17,7 @@ class PeachyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: lightColorScheme,
       ),
       home: const Scaffold(body: WidgetTree(),),
     );

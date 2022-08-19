@@ -83,8 +83,8 @@ class DailyState extends State<DailyPage> {
 
 Widget buildSection(List<Food> foods, BuildContext context) {
   return Card(
-    color: Theme.of(context).colorScheme.background,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    color: Theme.of(context).colorScheme.primaryContainer,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     child: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -94,14 +94,14 @@ Widget buildSection(List<Food> foods, BuildContext context) {
                     Text(
                       food.name,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                           ),
                     ),
                     const Spacer(),
                     Text(
                       "${food.amount}g",
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
                           ),
                     )
                   ],

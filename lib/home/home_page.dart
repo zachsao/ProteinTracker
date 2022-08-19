@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/home/screen.dart';
-import '../peachy_fab.dart';
+import '../widgets/peachy_fab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,6 +38,8 @@ class HomeState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: const PeachyFab(),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
         onTap: _onItemTap,
         currentIndex: selectedIndex,
         items: bottomBarItems,
