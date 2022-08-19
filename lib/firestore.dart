@@ -19,8 +19,12 @@ class FirestoreService {
   }
 
   Stream<QuerySnapshot<Food>> getFoods() {
+    var today = DateTime.now();
+    today = DateTime(today.year, today.month, today.day);
+    var todayTimestamp = Timestamp.fromDate(today);
     return _firestore
         .collection("foods")
+        .where("createdAt", isGreaterThan: todayTimestamp)
         .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),

@@ -1,17 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Meal {
-  final List<Food> items;
-
-  Meal(this.items);
-}
-
 class Food {
   final String name;
   final int amount;
   final MealType type;
+  Timestamp? createdAt;
 
-  Food({required this.name, required this.amount, required this.type});
+  Food({required this.name, required this.amount, required this.type, this.createdAt});
 
   factory Food.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -21,7 +16,8 @@ class Food {
     return Food(
       name: data?['name'],
       amount: data?['amount'],
-      type: MealType.values[data?['type']]
+      type: MealType.values[data?['type']],
+      createdAt: data?["createdAt"]
     );
   }
 
@@ -29,7 +25,8 @@ class Food {
     return {
       "name": name,
       "amount": amount,
-      "type": type.index
+      "type": type.index,
+      "createdAt": Timestamp.now()
     };
   }
 }
