@@ -38,10 +38,11 @@ class _PeachyFabState extends State<PeachyFab> {
   }
 
   void addFood() async {
-    print(_amountController.text);
     Food food = Food(name: _nameController.text, amount: int.parse(_amountController.text), type: dropdownValue);
-    print(food);
     await FirestoreService().addFood(food);
+    _nameController.clear();
+    _amountController.clear();
+    dropdownValue = MealType.values.first;
   }
 
   Future<void> _showMyDialog(BuildContext context) async {
