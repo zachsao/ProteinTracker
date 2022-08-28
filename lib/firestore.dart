@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:protein_tracker/auth.dart';
 import 'package:protein_tracker/models/meal.dart';
 
 class FirestoreService {
@@ -10,7 +11,7 @@ class FirestoreService {
 
   Future<void> addFood(Food food) async {
     _firestore
-        .collection("foods")
+        .collection("users").doc(Auth().currentUser!.uid).collection('foods')
         .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
@@ -23,7 +24,7 @@ class FirestoreService {
     today = DateTime(today.year, today.month, today.day);
     var todayTimestamp = Timestamp.fromDate(today);
     return _firestore
-        .collection("foods")
+        .collection("users").doc(Auth().currentUser!.uid).collection('foods')
         .where("createdAt", isGreaterThan: todayTimestamp)
         .withConverter(
           fromFirestore: Food.fromFirestore,
