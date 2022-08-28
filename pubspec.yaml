@@ -39,6 +39,7 @@ dependencies:
   google_sign_in: ^5.4.0
   cloud_firestore: ^3.4.3
   gradient_widgets: ^0.6.0
+  streaming_shared_preferences: ^2.0.0
 
 dev_dependencies:
   flutter_test:
