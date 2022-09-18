@@ -3,15 +3,17 @@ import 'package:protein_tracker/auth.dart';
 import 'package:protein_tracker/models/meal.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  DocumentReference userRef = FirebaseFirestore.instance
+      .collection("users")
+      .doc(Auth().currentUser!.uid);
 
-  Future<void> saveUser(Map<String, dynamic> user, String? uid) async {
-    _firestore.collection("users").doc(uid).set(user);
+  Future<void> saveUser(Map<String, dynamic> user) async {
+    userRef.set(user);
   }
 
   Future<void> addFood(Food food) async {
-    _firestore
-        .collection("users").doc(Auth().currentUser!.uid).collection('foods')
+    userRef
+        .collection('foods')
         .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
@@ -20,11 +22,9 @@ class FirestoreService {
   }
 
   Stream<QuerySnapshot<Food>> getFoods() {
-    var today = DateTime.now();
-    today = DateTime(today.year, today.month, today.day);
-    var todayTimestamp = Timestamp.fromDate(today);
-    return _firestore
-        .collection("users").doc(Auth().currentUser!.uid).collection('foods')
+    var todayTimestamp = Timestamp.fromDate(today());
+    return userRef
+        .collection('foods')
         .where("createdAt", isGreaterThan: todayTimestamp)
         .withConverter(
           fromFirestore: Food.fromFirestore,

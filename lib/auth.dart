@@ -29,7 +29,7 @@ class Auth {
       "username": currentUser?.displayName,
       "email": currentUser?.email
     };
-    await FirestoreService().saveUser(user, currentUser?.uid);
+    await FirestoreService().saveUser(user);
 
     return userCredential;
   }
