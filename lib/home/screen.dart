@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/home/daily_page.dart';
-import 'package:protein_tracker/home/weekly_page.dart';
+import 'package:protein_tracker/weekly/weekly_page.dart';
 
 class Screen {
   final IconData icon;

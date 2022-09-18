@@ -32,4 +32,20 @@ class FirestoreService {
         )
         .snapshots();
   }
+
+  Future<QuerySnapshot<Food>> getWeeklyData() {
+    DateTime weekStart = today().subtract(Duration(days: today().weekday - 1));
+    return userRef
+        .collection('foods')
+        .where("createdAt", isGreaterThan: Timestamp.fromDate(weekStart))
+        .withConverter(
+            fromFirestore: Food.fromFirestore,
+            toFirestore: ((Food food, options) => food.toFirestore()))
+        .get();
+  }
+
+  DateTime today() {
+    var today = DateTime.now();
+    return DateTime(today.year, today.month, today.day);
+  }
 }
