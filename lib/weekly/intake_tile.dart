@@ -22,9 +22,9 @@ class IntakeTile extends StatelessWidget {
       decoration: BoxDecoration(
           color: backgroundColor, borderRadius: BorderRadius.circular(10)),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Highest average intake:",
@@ -33,62 +33,48 @@ class IntakeTile extends StatelessWidget {
                     .titleLarge!
                     .copyWith(color: textColor)),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Breakfast",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: textColor)),
-                Text(
-                  breakfastAvg,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: textColor),
-                ),
-              ],
-            ),
+            MealRow(title: "Breakfast", textColor: textColor, avg: breakfastAvg),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Lunch",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: textColor)),
-                Text(
-                  lunchAvg,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: textColor),
-                ),
-              ],
-            ),
+            MealRow(title: "Lunch", textColor: textColor, avg: lunchAvg),
             const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Dinner",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: textColor)),
-                Text(
-                  dinnerAvg,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: textColor),
-                ),
-              ],
-            ),
+            MealRow(title: "Dinner", textColor: textColor, avg: dinnerAvg),
           ],
         ),
       ),
+    );
+  }
+}
+
+class MealRow extends StatelessWidget {
+  const MealRow({
+    Key? key,
+    required this.title,
+    required this.textColor,
+    required this.avg,
+  }) : super(key: key);
+
+  final String title;
+  final Color textColor;
+  final String avg;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title,
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(color: textColor)),
+        Text(
+          avg,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge!
+              .copyWith(color: textColor),
+        ),
+      ],
     );
   }
 }
