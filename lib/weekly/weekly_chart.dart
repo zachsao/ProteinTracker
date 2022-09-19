@@ -47,11 +47,6 @@ class WeeklyChart extends StatelessWidget {
   }
 }
 
-String dayFromIndex(int index) {
-  var days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-  return days[index];
-}
-
 class DailyTotal {
   final String day;
   final int total;
