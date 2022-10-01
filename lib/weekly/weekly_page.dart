@@ -39,7 +39,7 @@ class WeeklyState extends State<WeeklyPage> {
         return Column(
           children: [
             Text(
-              "This past week",
+              "Your weekly intake",
               style: Theme.of(context).textTheme.titleLarge,
             ),
             SizedBox(height: 250, child: WeeklyChart(foods: foods)),

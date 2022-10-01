@@ -18,7 +18,56 @@ class FirestoreService {
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
         )
-        .add(food);
+        .add(food)
+        .then((_) {
+      updateStats(food);
+    });
+  }
+
+  void updateStats(Food food) async {
+    var statsCollection = userRef.collection('stats');
+    // set or update today's total amount
+    await statsCollection.doc("${today()}").set(
+      {"total": FieldValue.increment(food.amount)},
+      SetOptions(merge: true),
+    );
+    updateStreakCounter();
+  }
+
+  void updateStreakCounter() async {
+    // Get totals from last 2 days
+    var statsCollection = userRef.collection('stats');
+    var yesterday = today().subtract(const Duration(days: 1));
+    var docs = (await statsCollection.where(FieldPath.documentId,
+            whereIn: ["${today()}", "$yesterday"]).get())
+        .docs;
+
+    int todaysTotal = docs
+        .firstWhere((element) => element.id == "${today()}")
+        .data()['total'];
+    int yesterdaysTotal = docs
+            .firstWhere((element) => element.id == "$yesterday")
+            .data()['total'] ??
+        0;
+
+    // if today's goal is reached
+    if (todaysTotal >= 150) {
+      var streakRef = statsCollection.doc("streak");
+      String counterLastUpdate = (await streakRef.get()).data()?["lastUpdate"] ?? "";
+      // counter wasn't updated today
+      if (counterLastUpdate != "${today()}") {
+        // and yesterdays's goal is reached => increment steak by 1
+        if (yesterdaysTotal >= 150) {
+          await streakRef.set(
+              {"count": FieldValue.increment(1), "lastUpdate": "${today()}"},
+              SetOptions(merge: true));
+        }
+        // Otherwise reset counter
+        else {
+          await streakRef.set({"count": 0, "lastUpdate": "${today()}"});
+        }
+      }
+    }
   }
 
   Stream<QuerySnapshot<Food>> getFoods() {

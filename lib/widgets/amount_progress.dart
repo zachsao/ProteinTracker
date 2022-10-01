@@ -17,6 +17,7 @@ class AmountProgress extends StatelessWidget {
           alignment: AlignmentDirectional.center,
           children: [
             GradientCircularProgressIndicator(
+              radius: 300,
               value: (total / goal) * 100,
               gradient: LinearGradient(colors: [
                 Theme.of(context).colorScheme.secondaryContainer,
