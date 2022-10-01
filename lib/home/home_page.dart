@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/home/screen.dart';
+import '../FoodRepository.dart';
 import '../widgets/peachy_fab.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class HomeState extends State<HomePage> {
   int selectedIndex = 0;
+  FoodRepository repository = FoodRepository();
 
   void _onItemTap(int index) {
     setState(() {
@@ -21,7 +23,7 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> bottomBarItems =
-        Screen.screens().map((screen) {
+        Screen.screens(repository).map((screen) {
       return BottomNavigationBarItem(icon: Icon(screen.icon), label: screen.label);
     }).toList();
 
@@ -31,7 +33,7 @@ class HomeState extends State<HomePage> {
           padding: const EdgeInsets.all(16.0),
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            child: Screen.screens()[selectedIndex].content,
+            child: Screen.screens(repository)[selectedIndex].content,
           ),
         ),
       ),

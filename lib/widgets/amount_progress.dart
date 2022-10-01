@@ -4,9 +4,9 @@ import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class AmountProgress extends StatelessWidget {
   final int total;
-  final StreamingSharedPreferences prefs;
+  final Preference<int> goal;
 
-  const AmountProgress({Key? key, required this.total, required this.prefs})
+  const AmountProgress({Key? key, required this.total, required this.goal})
       : super(key: key);
 
   @override
@@ -37,7 +37,7 @@ class AmountProgress extends StatelessWidget {
           ],
         );
       },
-      preference: prefs.getInt('daily_goal', defaultValue: 150),
+      preference: goal,
     );
   }
 }

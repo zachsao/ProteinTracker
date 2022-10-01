@@ -1,39 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/firestore.dart';
+import 'package:protein_tracker/FoodRepository.dart';
 import 'package:protein_tracker/models/meal.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import '../widgets/amount_progress.dart';
 import 'package:collection/collection.dart';
 
 class DailyPage extends StatefulWidget {
-  const DailyPage({Key? key}) : super(key: key);
+  final FoodRepository repository;
+  const DailyPage({Key? key, required this.repository}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DailyState();
 }
 
 class DailyState extends State<DailyPage> {
-  StreamingSharedPreferences? prefs;
-  void updateDailyGoal(int newGoal) async {
-    prefs?.setInt('daily_goal',newGoal);
-  }
-
-  void initPrefs() async {
-    prefs = await StreamingSharedPreferences.instance;
-  }
-
-  @override
-  void initState() {
-    initPrefs();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirestoreService().getFoods(),
+        stream: widget.repository.getFoods(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return const Center(
@@ -60,8 +46,8 @@ class DailyState extends State<DailyPage> {
                     ?.copyWith(fontWeight: FontWeight.w300),
               ),
               const SizedBox(height: 32),
-              AmountProgress(total: total, prefs: prefs!,),
-              UpdateGoalDialog(updateGoal: updateDailyGoal,),
+              AmountProgress(total: total, goal: widget.repository.getDailyGoal(),),
+              UpdateGoalDialog(updateGoal: widget.repository.updateDailyGoal,),
               const SizedBox(height: 32),
               buildSectionsList(meals)
             ],

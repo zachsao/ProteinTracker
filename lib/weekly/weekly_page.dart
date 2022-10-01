@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/firestore.dart';
 import 'package:protein_tracker/models/weekly_stats.dart';
 import 'package:protein_tracker/weekly/intake_tile.dart';
 import 'package:protein_tracker/weekly/tile.dart';
 import 'package:protein_tracker/weekly/weekly_chart.dart';
+import '../FoodRepository.dart';
 import '../models/meal.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class WeeklyPage extends StatefulWidget {
-  const WeeklyPage({Key? key}) : super(key: key);
+  final FoodRepository repository;
+  const WeeklyPage({Key? key, required this.repository}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => WeeklyState();
@@ -86,7 +87,7 @@ class WeeklyState extends State<WeeklyPage> {
           ],
         );
       },
-      future: FirestoreService().getWeeklyData(),
+      future: widget.repository.getWeeklyData(),
     );
   }
 }

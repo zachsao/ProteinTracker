@@ -20,11 +20,10 @@ class FirestoreService {
         )
         .add(food)
         .then((_) {
-      updateStats(food);
     });
   }
 
-  void updateStats(Food food) async {
+  Future<void> updateStats(Food food) async {
     var statsCollection = userRef.collection('stats');
     // set or update today's total amount
     await statsCollection.doc("${today()}").set(
