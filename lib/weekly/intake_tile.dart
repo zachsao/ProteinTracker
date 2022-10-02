@@ -31,7 +31,7 @@ class IntakeTile extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
-                    .copyWith(color: textColor)),
+                    .copyWith(color: textColor, fontWeight: FontWeight.w300)),
             const SizedBox(height: 16),
             MealRow(title: "Breakfast", textColor: textColor, avg: breakfastAvg),
             const SizedBox(height: 8),
@@ -66,13 +66,13 @@ class MealRow extends StatelessWidget {
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
-                .copyWith(color: textColor)),
+                .copyWith(color: textColor, fontWeight: FontWeight.w300)),
         Text(
           avg,
           style: Theme.of(context)
               .textTheme
               .titleLarge!
-              .copyWith(color: textColor),
+              .copyWith(color: textColor, fontWeight: FontWeight.w300),
         ),
       ],
     );

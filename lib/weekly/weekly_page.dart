@@ -7,6 +7,7 @@ import 'package:protein_tracker/weekly/weekly_chart.dart';
 import '../FoodRepository.dart';
 import '../models/meal.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class WeeklyPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class WeeklyState extends State<WeeklyPage> {
           children: [
             Text(
               "Your weekly intake",
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w300),
             ),
             SizedBox(height: 250, child: WeeklyChart(foods: foods)),
             const SizedBox(
@@ -78,7 +79,7 @@ class WeeklyState extends State<WeeklyPage> {
                       textColor: Color(0xFF5FAE67),
                       topText: "Streak",
                       midText: "$streak",
-                      bottomText: "days"),
+                      bottomText: Intl.plural(streak, other: "days", one: "day")),
                 ),
                 StaggeredGridTile.count(
                   crossAxisCellCount: 2,
