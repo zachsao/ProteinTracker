@@ -18,27 +18,30 @@ class IntakeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: backgroundColor, borderRadius: BorderRadius.circular(10)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Highest average intake:",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: textColor, fontWeight: FontWeight.w300)),
-            const SizedBox(height: 16),
-            MealRow(title: "Breakfast", textColor: textColor, avg: breakfastAvg),
-            const SizedBox(height: 8),
-            MealRow(title: "Lunch", textColor: textColor, avg: lunchAvg),
-            const SizedBox(height: 8),
-            MealRow(title: "Dinner", textColor: textColor, avg: dinnerAvg),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+            color: backgroundColor, borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Highest average intake:",
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: textColor, fontWeight: FontWeight.w300)),
+              const SizedBox(height: 16),
+              MealRow(title: "Breakfast", textColor: textColor, avg: breakfastAvg),
+              const SizedBox(height: 8),
+              MealRow(title: "Lunch", textColor: textColor, avg: lunchAvg),
+              const SizedBox(height: 8),
+              MealRow(title: "Dinner", textColor: textColor, avg: dinnerAvg),
+            ],
+          ),
         ),
       ),
     );
