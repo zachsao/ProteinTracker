@@ -23,17 +23,17 @@ class FirestoreService {
     });
   }
 
-  Future<void> updateStats(Food food) async {
+  Future<void> updateStats(Food food, int goal) async {
     var statsCollection = userRef.collection('stats');
     // set or update today's total amount
     await statsCollection.doc("${today()}").set(
       {"total": FieldValue.increment(food.amount)},
       SetOptions(merge: true),
     );
-    updateStreakCounter();
+    updateStreakCounter(goal);
   }
 
-  void updateStreakCounter() async {
+  void updateStreakCounter(int goal) async {
     // Get totals from last 2 days
     var statsCollection = userRef.collection('stats');
     var yesterday = today().subtract(const Duration(days: 1));
@@ -50,13 +50,13 @@ class FirestoreService {
         0;
 
     // if today's goal is reached
-    if (todaysTotal >= 150) {
+    if (todaysTotal >= goal) {
       var streakRef = statsCollection.doc("streak");
       String counterLastUpdate = (await streakRef.get()).data()?["lastUpdate"] ?? "";
       // counter wasn't updated today
       if (counterLastUpdate != "${today()}") {
         // and yesterdays's goal is reached => increment steak by 1
-        if (yesterdaysTotal >= 150) {
+        if (yesterdaysTotal >= goal) {
           await streakRef.set(
               {"count": FieldValue.increment(1), "lastUpdate": "${today()}"},
               SetOptions(merge: true));
@@ -90,6 +90,15 @@ class FirestoreService {
             fromFirestore: Food.fromFirestore,
             toFirestore: ((Food food, options) => food.toFirestore()))
         .get();
+  }
+
+  Future<int> getStreak() async {
+    var docs = (await userRef.collection("stats").where(FieldPath.documentId, isEqualTo: "streak").get()).docs;
+    if (docs.isEmpty) {
+      return 0;
+    } else {
+      return docs.first.data()["count"];
+    }
   }
 
   DateTime today() {

@@ -24,9 +24,14 @@ class FoodRepository {
     return firestoreService.getWeeklyData();
   }
 
+  Future<int> getStreak() async {
+    return await firestoreService.getStreak();
+  }
+
   Future<void> addFood(Food food) async {
     await firestoreService.addFood(food);
-    await firestoreService.updateStats(food);
+    int goal = await getDailyGoal().single;
+    await firestoreService.updateStats(food, goal);
   }
 
   void updateDailyGoal(int newGoal) async {

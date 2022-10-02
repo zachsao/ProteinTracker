@@ -38,7 +38,7 @@ class HomeState extends State<HomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: const PeachyFab(),
+      floatingActionButton: PeachyFab(addFood: repository.addFood),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         selectedItemColor: Theme.of(context).colorScheme.secondary,

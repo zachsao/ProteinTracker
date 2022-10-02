@@ -18,6 +18,14 @@ class WeeklyPage extends StatefulWidget {
 }
 
 class WeeklyState extends State<WeeklyPage> {
+  int streak = 0;
+
+  @override
+  void initState() {
+    widget.repository.getStreak().then((value) => streak = value);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -69,7 +77,7 @@ class WeeklyState extends State<WeeklyPage> {
                       backgroundColor: Color(0xFFA1FFB6),
                       textColor: Color(0xFF5FAE67),
                       topText: "Streak",
-                      midText: "0",
+                      midText: "$streak",
                       bottomText: "days"),
                 ),
                 StaggeredGridTile.count(

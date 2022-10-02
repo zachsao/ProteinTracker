@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/firestore.dart';
 import 'package:protein_tracker/models/meal.dart';
 
 class PeachyFab extends StatefulWidget {
+  final Function addFood;
   const PeachyFab({
-    Key? key,
+    Key? key, required this.addFood,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class _PeachyFabState extends State<PeachyFab> {
 
   void addFood() async {
     Food food = Food(name: _nameController.text, amount: int.parse(_amountController.text), type: dropdownValue);
-    await FirestoreService().addFood(food);
+    widget.addFood(food);
     _nameController.clear();
     _amountController.clear();
     dropdownValue = MealType.values.first;
