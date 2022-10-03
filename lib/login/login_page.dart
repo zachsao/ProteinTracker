@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/auth.dart';
+import 'package:protein_tracker/widgets/floating_logo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,13 +12,35 @@ class LoginPage extends StatefulWidget {
 class LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: ElevatedButton(onPressed: () => _handleSignIn(), child: const Text("Sign in with Google")),);
+    return Scaffold(
+      body: Container(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 42),
+                Text("Track your protein", style: Theme.of(context).textTheme.headline4?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),),
+                const SizedBox(height: 20),
+                Text("Get\nPeachy.", style: TextStyle(fontWeight: FontWeight.w100,color: Theme.of(context).colorScheme.primary.withAlpha(200), fontSize: 85),),
+                const SizedBox(height: 20),
+                const FloatingLogo(),
+                const Spacer(),
+                ElevatedButton(
+                    onPressed: () => _handleSignIn(),
+                    child: const Text("Sign in with Google")),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
-  
+
   void _handleSignIn() {
     setState(() {
       Auth().signInWithGoogle();
     });
   }
-
 }
