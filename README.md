@@ -1,16 +1,15 @@
-# protein_tracker
+# Peachy: protein tracker 🍑
 
-A new Flutter project.
+A mobile app that allows the user to track their protein intake according to their fitness goal.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Login: Sign in with Google
+- Daily page: Add and display the daily intake along with the current progress of the day. Edit the daily amount goal
+- Statistics page: Display the current week's stats such as average intake per day, streak, average per meal.
 
-A few resources to get you started if this is your first Flutter project:
+## Tech stack
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Frontend: Flutter
+- Backend: Firebase Auth & Firestore
+- plateform: iOS & Android
