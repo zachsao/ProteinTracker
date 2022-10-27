@@ -46,7 +46,6 @@ class Auth {
 
   Future<void> saveUserToFirestore() async {
     var user = <String, dynamic>{
-      "username": currentUser?.displayName,
       "email": currentUser?.email
     };
     await FirestoreService().saveUser(user);
