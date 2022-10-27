@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:protein_tracker/firestore.dart';
 
@@ -25,13 +26,30 @@ class Auth {
 
     // Once signed in, return the UserCredential
     var userCredential = await _firebaseAuth.signInWithCredential(credential);
-    var user = <String, dynamic> {
+    saveUserToFirestore();
+
+    return userCredential;
+  }
+
+  Future<void> signInWithApple() async {
+    final appleProvider = AppleAuthProvider();
+    appleProvider.addScope('email');
+
+    if (kIsWeb) {
+      // Once signed in, return the UserCredential
+      await _firebaseAuth.signInWithPopup(appleProvider);
+    } else {
+      await _firebaseAuth.signInWithProvider(appleProvider);
+    }
+    saveUserToFirestore();
+  }
+
+  Future<void> saveUserToFirestore() async {
+    var user = <String, dynamic>{
       "username": currentUser?.displayName,
       "email": currentUser?.email
     };
     await FirestoreService().saveUser(user);
-
-    return userCredential;
   }
 
   Future<void> signOut() {

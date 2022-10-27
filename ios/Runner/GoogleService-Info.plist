@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>509089469622-dro2c68afk1etdfq6q5i0s7nqac40nur.apps.googleusercontent.com</string>
+	<string>509089469622-qr7ddt193ecffqdmik6135669rqvlkrq.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.509089469622-dro2c68afk1etdfq6q5i0s7nqac40nur</string>
+	<string>com.googleusercontent.apps.509089469622-qr7ddt193ecffqdmik6135669rqvlkrq</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC58f7xnC3GCpzyo_A1ycSHGnUfsl_hkbE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.proteinTracker</string>
+	<string>com.zachsao.proteinTracker</string>
 	<key>PROJECT_ID</key>
 	<string>protein-tracker-68a13</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:509089469622:ios:7b814b521810b2bc6c8217</string>
+	<string>1:509089469622:ios:bdc0a8a09e93aeac6c8217</string>
+	<key>DATABASE_URL</key>
+	<string>https://protein-tracker-68a13-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
