@@ -23,12 +23,12 @@ class FirestoreService {
     });
   }
 
-  Future<void> updateStats(Food food, int goal) async {
-    print("zsao updating stats");
+  Future<void> updateStats(Food food, int goal, FirestoreOperation operation) async {
     var statsCollection = userRef.collection('stats');
     // set or update today's total amount
+    var amount = (operation == FirestoreOperation.add) ? food.amount : -food.amount;
     await statsCollection.doc("${today()}").set(
-      {"total": FieldValue.increment(food.amount)},
+      {"total": FieldValue.increment(amount)},
       SetOptions(merge: true),
     );
     updateStreakCounter(goal);
@@ -82,6 +82,10 @@ class FirestoreService {
         .snapshots();
   }
 
+  Future<void> delete(Food food) async{
+    await userRef.collection('foods').doc(food.id!).delete();
+  }
+
   Future<QuerySnapshot<Food>> getWeeklyData() {
     DateTime weekStart = today().subtract(Duration(days: today().weekday - 1));
     return userRef
@@ -106,4 +110,8 @@ class FirestoreService {
     var today = DateTime.now();
     return DateTime(today.year, today.month, today.day);
   }
+}
+
+enum FirestoreOperation {
+  add, delete
 }

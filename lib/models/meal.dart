@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Food {
+  String? id;
   final String name;
   final int amount;
   final MealType type;
@@ -28,6 +29,11 @@ class Food {
       "type": type.index,
       "createdAt": Timestamp.now()
     };
+  }
+
+  Food setId(String id) {
+    this.id = id;
+    return this;
   }
 }
 

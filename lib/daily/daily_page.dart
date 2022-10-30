@@ -31,10 +31,11 @@ class DailyState extends State<DailyPage> {
             child: CircularProgressIndicator(),
           );
         }
-        var foods = snapshot.data!.docs.map((e) => e.data()! as Food).toList();
+        var foods = snapshot.data!.docs.map((e) => (e.data()! as Food).setId(e.id)).toList();
         var total = foods.map((e) => e.amount).sum;
         var meals = foods.groupListsBy((element) => element.type);
-        var orderedMeals = Map.fromEntries(meals.entries.toList()..sort((a, b) => a.key.index.compareTo(b.key.index)));
+        var orderedMeals = Map.fromEntries(meals.entries.toList()
+          ..sort((a, b) => a.key.index.compareTo(b.key.index)));
 
         return Column(
           children: [
@@ -96,7 +97,7 @@ class DailyState extends State<DailyPage> {
         child: Column(
           children: foods
               .mapIndexed((index, food) => sectionItem(
-                  context, food.name, food.amount, index == foods.length - 1))
+                  context, food, index == foods.length - 1))
               .toList(),
         ),
       ),
@@ -104,25 +105,64 @@ class DailyState extends State<DailyPage> {
   }
 
   Widget sectionItem(
-      BuildContext context, String name, int amount, bool isLast) {
+      BuildContext context, Food food, bool isLast) {
+    final RenderObject? overlay =
+        Overlay.of(context)?.context.findRenderObject();
+    var tapPosition;
+
+    void _storePosition(TapDownDetails details) {
+      tapPosition = details.globalPosition;
+    }
+
     return Column(
       children: [
-        Row(
-          children: [
-            Text(
-              name,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-            ),
-            const Spacer(),
-            Text(
-              "${amount}g",
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-            )
-          ],
+        GestureDetector(
+          onTapDown: _storePosition,
+          onLongPress: () {
+            showMenu(
+                context: context,
+                position: RelativeRect.fromRect(
+                    tapPosition &
+                        const Size(40, 40), // smaller rect, the touch area
+                    Offset.zero &
+                        overlay!.semanticBounds
+                            .size // Bigger rect, the entire screen
+                    ),
+                items: [
+                  PopupMenuItem(
+                    textStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
+                    child: Row(
+                      children: [
+                        const Text("Delete"),
+                        const Spacer(),
+                        Icon(
+                          Icons.delete,
+                          color: Theme.of(context).colorScheme.error,
+                        )
+                      ],
+                    ),
+                    onTap: () => widget.repository.delete(food),
+                  )
+                ]);
+          },
+          child: Row(
+            children: [
+              Text(
+                food.name,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+              ),
+              const Spacer(),
+              Text(
+                "${food.amount}g",
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+              )
+            ],
+          ),
         ),
         if (!isLast) const Divider()
       ],
