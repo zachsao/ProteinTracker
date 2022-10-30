@@ -80,8 +80,8 @@ class WeeklyState extends State<WeeklyPage> {
                       backgroundColor: Color(0xFFD6FFA1),
                       textColor: Color(0xFF6AAE5F),
                       topText: "Avg.",
-                      midText: "${stats.globalAvg}g",
-                      bottomText: "per meal"),
+                      midText: "${stats.dailyAvg}g",
+                      bottomText: "per day"),
                 ),
                 StaggeredGridTile.count(
                   crossAxisCellCount: 1,

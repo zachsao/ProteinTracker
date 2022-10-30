@@ -29,7 +29,7 @@ class IntakeTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Highest average intake:",
+              Text("Average per meal:",
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
