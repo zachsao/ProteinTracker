@@ -4,7 +4,7 @@ import 'package:protein_tracker/models/weekly_stats.dart';
 import 'package:protein_tracker/weekly/intake_tile.dart';
 import 'package:protein_tracker/weekly/tile.dart';
 import 'package:protein_tracker/weekly/weekly_chart.dart';
-import '../FoodRepository.dart';
+import '../food_repository.dart';
 import '../auth.dart';
 import '../models/meal.dart';
 import 'package:collection/collection.dart';

@@ -30,7 +30,7 @@ class FoodRepository {
 
   Future<void> addFood(Food food) async {
     await firestoreService.addFood(food);
-    int goal = await getDailyGoal().single;
+    int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(food, goal);
   }
 

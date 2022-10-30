@@ -24,6 +24,7 @@ class FirestoreService {
   }
 
   Future<void> updateStats(Food food, int goal) async {
+    print("zsao updating stats");
     var statsCollection = userRef.collection('stats');
     // set or update today's total amount
     await statsCollection.doc("${today()}").set(

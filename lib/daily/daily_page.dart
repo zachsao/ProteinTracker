@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/FoodRepository.dart';
+import 'package:protein_tracker/food_repository.dart';
 import 'package:protein_tracker/models/meal.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
 import '../widgets/amount_progress.dart';
@@ -15,45 +15,50 @@ class DailyPage extends StatefulWidget {
 }
 
 class DailyState extends State<DailyPage> {
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: widget.repository.getFoods(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Something went wrong'),
-            );
-          }
-    
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          var foods = snapshot.data!.docs.map((e) => e.data()! as Food).toList();
-          var total = foods.map((e) => e.amount).sum;
-          var meals = foods.groupListsBy((element) => element.type);
-    
-          return Column(
-            children: [
-              Text(
-                "What did you eat today ?",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w300),
-              ),
-              const SizedBox(height: 32),
-              AmountProgress(total: total, goal: widget.repository.getDailyGoal(),),
-              UpdateGoalDialog(updateGoal: widget.repository.updateDailyGoal,),
-              const SizedBox(height: 32),
-              buildSectionsList(meals)
-            ],
+      stream: widget.repository.getFoods(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text('Something went wrong'),
           );
-        },
-      );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        var foods = snapshot.data!.docs.map((e) => e.data()! as Food).toList();
+        var total = foods.map((e) => e.amount).sum;
+        var meals = foods.groupListsBy((element) => element.type);
+        var orderedMeals = Map.fromEntries(meals.entries.toList()..sort((a, b) => a.key.index.compareTo(b.key.index)));
+
+        return Column(
+          children: [
+            Text(
+              "What did you eat today ?",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w300),
+            ),
+            const SizedBox(height: 32),
+            AmountProgress(
+              total: total,
+              goal: widget.repository.getDailyGoal(),
+            ),
+            UpdateGoalDialog(
+              updateGoal: widget.repository.updateDailyGoal,
+            ),
+            const SizedBox(height: 32),
+            buildSectionsList(orderedMeals)
+          ],
+        );
+      },
+    );
   }
 
   Widget buildSectionsList(Map<MealType, List<Food>> meals) {
@@ -81,39 +86,46 @@ class DailyState extends State<DailyPage> {
           }),
     );
   }
-}
 
-Widget buildSection(List<Food> foods, BuildContext context) {
-  return Card(
-    color: Theme.of(context).colorScheme.primaryContainer,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: foods
-            .map((food) => Row(
-                  children: [
-                    Text(
-                      food.name,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      "${food.amount}g",
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                    )
-                  ],
-                ))
-            .toList(),
+  Widget buildSection(List<Food> foods, BuildContext context) {
+    return Card(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: foods
+              .mapIndexed((index, food) => sectionItem(
+                  context, food.name, food.amount, index == foods.length - 1))
+              .toList(),
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget sectionItem(
+      BuildContext context, String name, int amount, bool isLast) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              name,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+            ),
+            const Spacer(),
+            Text(
+              "${amount}g",
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+            )
+          ],
+        ),
+        if (!isLast) const Divider()
+      ],
+    );
+  }
 }

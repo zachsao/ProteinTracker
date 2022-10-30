@@ -32,5 +32,5 @@ class Food {
 }
 
 enum MealType {
-  breakfast, lunch, dinner, snack
+  breakfast, lunch, snack, dinner,
 }
