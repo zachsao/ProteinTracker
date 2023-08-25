@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:protein_tracker/firestore.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
@@ -32,16 +33,25 @@ class FoodRepository {
     await firestoreService.addFood(food);
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(food, goal, FirestoreOperation.add);
+    await FirebaseAnalytics.instance.logEvent(name: "Add food", parameters: {
+      "food": food
+    });
   }
 
   Future<void> delete(Food food) async {
     await firestoreService.delete(food);
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(food, goal, FirestoreOperation.delete);
+    await FirebaseAnalytics.instance.logEvent(name: "delete food", parameters: {
+      "food": food
+    });
   }
 
   void updateDailyGoal(int newGoal) async {
     prefs!.setInt('daily_goal', newGoal);
+    await FirebaseAnalytics.instance.logEvent(name: "Update goal", parameters: {
+      "newGoal": newGoal
+    });
   }
 
   Preference<int> getDailyGoal() {

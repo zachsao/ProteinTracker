@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
@@ -12,6 +13,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginState extends State<LoginPage> {
+void logEvent() async {
+    await FirebaseAnalytics.instance.logScreenView(screenName: "Login page");
+  }
+
+  @override
+  void initState() {
+    logEvent();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

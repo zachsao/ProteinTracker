@@ -5,6 +5,7 @@ import 'package:protein_tracker/models/meal.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
 import '../widgets/amount_progress.dart';
 import 'package:collection/collection.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class DailyPage extends StatefulWidget {
   final FoodRepository repository;
@@ -15,6 +16,16 @@ class DailyPage extends StatefulWidget {
 }
 
 class DailyState extends State<DailyPage> {
+  void logEvent() async {
+    await FirebaseAnalytics.instance.logScreenView(screenName: "Daily page");
+  }
+
+  @override
+  void initState() {
+    logEvent();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

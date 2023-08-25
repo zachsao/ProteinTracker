@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/models/weekly_stats.dart';
 import 'package:protein_tracker/weekly/intake_tile.dart';
@@ -22,8 +23,13 @@ class WeeklyPage extends StatefulWidget {
 class WeeklyState extends State<WeeklyPage> {
   int streak = 0;
 
+  void logEvent() async {
+    await FirebaseAnalytics.instance.logScreenView(screenName: "Login page");
+  }
+
   @override
   void initState() {
+    logEvent();
     widget.repository.getStreak().then((value) => streak = value);
     super.initState();
   }
