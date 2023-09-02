@@ -72,10 +72,17 @@ class FirestoreService {
     int todaysTotal = docs
         .firstWhere((element) => element.id == "${today()}")
         .data()['total'];
-    int yesterdaysTotal = docs
+    int yesterdaysTotal;
+
+    try {
+      yesterdaysTotal = docs
             .firstWhere((element) => element.id == "$yesterday")
-            .data()['total'] ??
-        0;
+            .data()['total'];
+    } catch (exception) {
+      // there was no entry yesterday, reset the counter and exit.
+      await statsCollection.doc("streak").set({"count": 0, "lastUpdate": "${today()}"});
+      return;
+    }
 
     // if today's goal is reached
     if (todaysTotal >= goal) {
