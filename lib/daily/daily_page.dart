@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/food_repository.dart';
 import 'package:protein_tracker/models/meal.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
+import '../food_dialog_content.dart';
 import '../widgets/amount_progress.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -26,6 +29,17 @@ class DailyState extends State<DailyPage> {
     super.initState();
   }
 
+  Future<void> _showMyDialog(BuildContext context, Food food) async {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) async => await showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return FoodDialogContent(upsertFood: widget.repository.updateFood, food: food,);
+              },
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -42,7 +56,9 @@ class DailyState extends State<DailyPage> {
             child: CircularProgressIndicator(),
           );
         }
-        var foods = snapshot.data!.docs.map((e) => (e.data()! as Food).setId(e.id)).toList();
+        var foods = snapshot.data!.docs
+            .map((e) => (e.data()! as Food).setId(e.id))
+            .toList();
         var total = foods.map((e) => e.amount).sum;
         var meals = foods.groupListsBy((element) => element.type);
         var orderedMeals = Map.fromEntries(meals.entries.toList()
@@ -107,16 +123,15 @@ class DailyState extends State<DailyPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: foods
-              .mapIndexed((index, food) => sectionItem(
-                  context, food, index == foods.length - 1))
+              .mapIndexed((index, food) =>
+                  sectionItem(context, food, index == foods.length - 1))
               .toList(),
         ),
       ),
     );
   }
 
-  Widget sectionItem(
-      BuildContext context, Food food, bool isLast) {
+  Widget sectionItem(BuildContext context, Food food, bool isLast) {
     final RenderObject? overlay =
         Overlay.of(context)?.context.findRenderObject();
     var tapPosition;
@@ -140,6 +155,21 @@ class DailyState extends State<DailyPage> {
                             .size // Bigger rect, the entire screen
                     ),
                 items: [
+                  PopupMenuItem(
+                    textStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                    child: Row(
+                      children: [
+                        const Text("Edit"),
+                        const Spacer(),
+                        Icon(
+                          Icons.edit,
+                          color: Theme.of(context).colorScheme.primary,
+                        )
+                      ],
+                    ),
+                    onTap: () => _showMyDialog(context, food),
+                  ),
                   PopupMenuItem(
                     textStyle:
                         TextStyle(color: Theme.of(context).colorScheme.error),

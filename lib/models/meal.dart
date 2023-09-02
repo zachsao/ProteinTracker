@@ -7,7 +7,7 @@ class Food {
   final MealType type;
   Timestamp? createdAt;
 
-  Food({required this.name, required this.amount, required this.type, this.createdAt});
+  Food({this.id, required this.name, required this.amount, required this.type, this.createdAt});
 
   factory Food.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,

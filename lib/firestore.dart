@@ -19,14 +19,41 @@ class FirestoreService {
           toFirestore: ((Food food, options) => food.toFirestore()),
         )
         .add(food)
-        .then((_) {
-    });
+        .then((_) {});
   }
 
-  Future<void> updateStats(Food food, int goal, FirestoreOperation operation) async {
+  Future<void> updateFood(Food food) async {
+    userRef
+        .collection('foods')
+        .doc(food.id)
+        .withConverter(
+          fromFirestore: Food.fromFirestore,
+          toFirestore: ((Food food, options) => food.toFirestore()),
+        )
+        .update({
+      "name": food.name,
+      "amount": food.amount,
+      "type": food.type.index
+    }).then((_) {});
+  }
+
+  Future<void> updateStats(
+      Food food, Food? oldFood, int goal, FirestoreOperation operation) async {
     var statsCollection = userRef.collection('stats');
     // set or update today's total amount
-    var amount = (operation == FirestoreOperation.add) ? food.amount : -food.amount;
+    int amount;
+    switch (operation) {
+      case FirestoreOperation.add:
+        amount = food.amount;
+        break;
+      case FirestoreOperation.delete:
+        amount = -food.amount;
+        break;
+      case FirestoreOperation.update:
+        amount = food.amount - oldFood!.amount;
+        break;
+    }
+
     await statsCollection.doc("${today()}").set(
       {"total": FieldValue.increment(amount)},
       SetOptions(merge: true),
@@ -53,7 +80,8 @@ class FirestoreService {
     // if today's goal is reached
     if (todaysTotal >= goal) {
       var streakRef = statsCollection.doc("streak");
-      String counterLastUpdate = (await streakRef.get()).data()?["lastUpdate"] ?? "";
+      String counterLastUpdate =
+          (await streakRef.get()).data()?["lastUpdate"] ?? "";
       // counter wasn't updated today
       if (counterLastUpdate != "${today()}") {
         // and yesterdays's goal is reached => increment steak by 1
@@ -82,7 +110,7 @@ class FirestoreService {
         .snapshots();
   }
 
-  Future<void> delete(Food food) async{
+  Future<void> delete(Food food) async {
     await userRef.collection('foods').doc(food.id!).delete();
   }
 
@@ -98,7 +126,11 @@ class FirestoreService {
   }
 
   Future<int> getStreak() async {
-    var docs = (await userRef.collection("stats").where(FieldPath.documentId, isEqualTo: "streak").get()).docs;
+    var docs = (await userRef
+            .collection("stats")
+            .where(FieldPath.documentId, isEqualTo: "streak")
+            .get())
+        .docs;
     if (docs.isEmpty) {
       return 0;
     } else {
@@ -116,6 +148,4 @@ class FirestoreService {
   }
 }
 
-enum FirestoreOperation {
-  add, delete
-}
+enum FirestoreOperation { add, delete, update}

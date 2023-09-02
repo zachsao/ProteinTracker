@@ -32,16 +32,23 @@ class FoodRepository {
   Future<void> addFood(Food food) async {
     await firestoreService.addFood(food);
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(food, goal, FirestoreOperation.add);
+    await firestoreService.updateStats(food, null, goal, FirestoreOperation.add);
     await FirebaseAnalytics.instance.logEvent(name: "Add food", parameters: {
       "food": food
     });
   }
 
+  Future<void> updateFood(Food newFood, Food oldFood) async {
+    print("zsao updating ${oldFood.id} for ${newFood.id}");
+    await firestoreService.updateFood(newFood);
+    int goal = getDailyGoal().getValue();
+    await firestoreService.updateStats(newFood, oldFood,goal, FirestoreOperation.add);
+  }
+
   Future<void> delete(Food food) async {
     await firestoreService.delete(food);
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(food, goal, FirestoreOperation.delete);
+    await firestoreService.updateStats(food, null, goal, FirestoreOperation.delete);
     await FirebaseAnalytics.instance.logEvent(name: "delete food", parameters: {
       "food": food
     });
