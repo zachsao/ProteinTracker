@@ -72,35 +72,38 @@ class FirestoreService {
     int todaysTotal = docs
         .firstWhere((element) => element.id == "${today()}")
         .data()['total'];
-    int yesterdaysTotal;
 
-    try {
-      yesterdaysTotal = docs
-            .firstWhere((element) => element.id == "$yesterday")
-            .data()['total'];
-    } catch (exception) {
-      // there was no entry yesterday, reset the counter and exit.
-      await statsCollection.doc("streak").set({"count": 0, "lastUpdate": "${today()}"});
-      return;
-    }
-
+    var streakRef = statsCollection.doc("streak");
+    String counterLastUpdate =
+        (await streakRef.get()).data()?["lastUpdate"] ?? "";
     // if today's goal is reached
     if (todaysTotal >= goal) {
-      var streakRef = statsCollection.doc("streak");
-      String counterLastUpdate =
-          (await streakRef.get()).data()?["lastUpdate"] ?? "";
-      // counter wasn't updated today
+      // and the counter wasn't updated today
       if (counterLastUpdate != "${today()}") {
-        // and yesterdays's goal is reached => increment steak by 1
-        if (yesterdaysTotal >= goal) {
-          await streakRef.set(
-              {"count": FieldValue.increment(1), "lastUpdate": "${today()}"},
-              SetOptions(merge: true));
+        // first, reset the counter if yesterday has no entry
+        try {
+          int yesterdaysTotal = docs
+              .firstWhere((element) => element.id == "$yesterday")
+              .data()['total'];
+
+          if (yesterdaysTotal <= goal) {
+            resetCounter();
+          }
+        } catch (exception) {
+          // there was no entry yesterday, reset the counter and exit.
+          resetCounter();
         }
-        // Otherwise reset counter
-        else {
-          await streakRef.set({"count": 0, "lastUpdate": "${today()}"});
-        }
+        // then increment the counter
+        await streakRef.set(
+            {"count": FieldValue.increment(1), "lastUpdate": "${today()}"},
+            SetOptions(merge: true));
+      }
+    } else {
+      // we reduced the intake and fell back under the goal
+      if (counterLastUpdate == "${today()}") {
+        await streakRef.set(
+            {"count": FieldValue.increment(-1), "lastUpdate": ""},
+            SetOptions(merge: true));
       }
     }
   }
@@ -153,6 +156,13 @@ class FirestoreService {
   Future<void> deleteUser() async {
     userRef.delete();
   }
+
+  void resetCounter() async {
+    await userRef
+        .collection('stats')
+        .doc("streak")
+        .set({"count": 0, "lastUpdate": ""});
+  }
 }
 
-enum FirestoreOperation { add, delete, update}
+enum FirestoreOperation { add, delete, update }
