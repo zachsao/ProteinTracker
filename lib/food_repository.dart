@@ -44,7 +44,7 @@ class FoodRepository {
   Future<void> updateFood(Food newFood, Food oldFood) async {
     await firestoreService.updateFood(newFood);
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(newFood, oldFood,goal, FirestoreOperation.add);
+    await firestoreService.updateStats(newFood, oldFood,goal, FirestoreOperation.update);
     await FirebaseAnalytics.instance.logEvent(name: "Update food", parameters: {
       "new name": newFood.name,
       "new meal": newFood.type.name,
