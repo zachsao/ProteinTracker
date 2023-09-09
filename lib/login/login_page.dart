@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
@@ -52,7 +54,7 @@ void logEvent() async {
                 const SizedBox(height: 20),
                 const FloatingLogo(),
                 const Spacer(),
-                SignInButton(Buttons.AppleDark, onPressed: () => _signInWithApple()),
+                if (Platform.isIOS) SignInButton(Buttons.AppleDark, onPressed: () => _signInWithApple()),
                 SignInButton(Buttons.Google, onPressed: () => _handleSignIn()),
               ],
             ),
