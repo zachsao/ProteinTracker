@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:protein_tracker/color_schemes.g.dart';
@@ -16,7 +18,8 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  runApp(const PeachyApp());
+  runApp(
+      DevicePreview(enabled: !kReleaseMode, builder: ((context) => const PeachyApp())));
 }
 
 class PeachyApp extends StatelessWidget {
@@ -25,6 +28,9 @@ class PeachyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       theme: ThemeData(
         colorScheme: lightColorScheme,
       ),

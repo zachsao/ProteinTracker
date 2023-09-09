@@ -45,6 +45,7 @@ dependencies:
   firebase_crashlytics: ^3.3.4
   firebase_analytics: ^10.4.4
   syncfusion_flutter_charts: ^21.2.4
+  device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:
