@@ -8,7 +8,6 @@ import 'package:protein_tracker/weekly/weekly_chart.dart';
 import '../food_repository.dart';
 import '../auth.dart';
 import '../models/meal.dart';
-import 'package:collection/collection.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -83,8 +82,8 @@ class WeeklyState extends State<WeeklyPage> {
                   crossAxisCellCount: 1,
                   mainAxisCellCount: 1,
                   child: Tile(
-                      backgroundColor: Color(0xFFD6FFA1),
-                      textColor: Color(0xFF6AAE5F),
+                      backgroundColor: const Color(0xFFD6FFA1),
+                      textColor: const Color(0xFF6AAE5F),
                       topText: "Avg.",
                       midText: "${stats.dailyAvg}g",
                       bottomText: "per day"),
@@ -93,8 +92,8 @@ class WeeklyState extends State<WeeklyPage> {
                   crossAxisCellCount: 1,
                   mainAxisCellCount: 1,
                   child: Tile(
-                      backgroundColor: Color(0xFFA1FFB6),
-                      textColor: Color(0xFF5FAE67),
+                      backgroundColor: const Color(0xFFA1FFB6),
+                      textColor: const Color(0xFF5FAE67),
                       topText: "Streak",
                       midText: "$streak",
                       bottomText:
@@ -104,8 +103,8 @@ class WeeklyState extends State<WeeklyPage> {
                   crossAxisCellCount: 2,
                   mainAxisCellCount: 1,
                   child: IntakeTile(
-                      backgroundColor: Color(0xFF19D083),
-                      textColor: Color(0xFF367845),
+                      backgroundColor: const Color(0xFF19D083),
+                      textColor: const Color(0xFF367845),
                       breakfastAvg:
                           "${stats.avgPerMeal[MealType.breakfast] ?? 0}g",
                       lunchAvg: "${stats.avgPerMeal[MealType.lunch] ?? 0}g",
@@ -115,7 +114,7 @@ class WeeklyState extends State<WeeklyPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
-              child: OutlinedButton(onPressed: () => Auth().signOut(), child: Text("Sign out",),),
+              child: OutlinedButton(onPressed: () => Auth().signOut(), child: const Text("Sign out",),),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),

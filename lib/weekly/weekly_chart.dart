@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:collection/collection.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../models/meal.dart';
 import 'package:intl/intl.dart';
 
@@ -10,8 +10,10 @@ class WeeklyChart extends StatelessWidget {
 
   const WeeklyChart({super.key, required this.foods});
 
-  List<charts.Series<DailyTotal, String>> _createChartData(BuildContext context) {
-    Map<String, int> days = { for (var e in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) e : 0 };
+  List<ColumnSeries<DailyTotal, String>> createChartData(BuildContext context) {
+    Map<String, int> days = {
+      for (var e in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) e: 0
+    };
 
     List<DailyTotal> dailyTotals = [];
     Map<String, int> groupedTotals = foods
@@ -20,17 +22,17 @@ class WeeklyChart extends StatelessWidget {
             MapEntry(timestamp, foods.map((e) => e.amount).toList().sum));
 
     days.addAll(groupedTotals);
-    days.forEach((key, value) {dailyTotals.add(DailyTotal(key, value)); });
-    
+    days.forEach((key, value) {
+      dailyTotals.add(DailyTotal(key, value));
+    });
 
     return [
-      charts.Series<DailyTotal, String>(
-        id: 'Totals',
-        colorFn: (_, __) => charts.ColorUtil.fromDartColor(Theme.of(context).colorScheme.primary),
-        domainFn: (DailyTotal totals, _) => totals.day,
-        measureFn: (DailyTotal totals, _) => totals.total,
-        data: dailyTotals,
-      )
+      ColumnSeries<DailyTotal, String>(
+          dataSource: dailyTotals,
+          xValueMapper: (DailyTotal data, _) => data.day,
+          yValueMapper: (DailyTotal data, _) => data.total,
+          name: 'Gold',
+          color: Theme.of(context).colorScheme.primary)
     ];
   }
 
@@ -40,10 +42,10 @@ class WeeklyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return charts.BarChart(
-      _createChartData(context),
-      animate: true,
-    );
+    return SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        primaryYAxis: NumericAxis(minimum: 0),
+        series: createChartData(context));
   }
 }
 
