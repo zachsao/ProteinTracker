@@ -11,7 +11,7 @@ class FirestoreService {
     userRef.set(user);
   }
 
-  Future<void> addFood(Food food) async {
+  Future<void> addFood(Food food, Future<void> Function() onSuccess) async {
     userRef
         .collection('foods')
         .withConverter(
@@ -19,7 +19,9 @@ class FirestoreService {
           toFirestore: ((Food food, options) => food.toFirestore()),
         )
         .add(food)
-        .then((_) {});
+        .then((_) {
+          onSuccess();
+        });
   }
 
   Future<void> updateFood(Food food) async {

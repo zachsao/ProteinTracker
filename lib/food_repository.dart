@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:get_it/get_it.dart';
+import 'package:protein_tracker/data/database.dart';
 import 'package:protein_tracker/firestore.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
@@ -30,7 +32,8 @@ class FoodRepository {
   }
 
   Future<void> addFood(Food food) async {
-    await firestoreService.addFood(food);
+    await firestoreService.addFood(food, () => GetIt.I<FoodDatabase>().insert(food) ) ;
+
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(food, null, goal, FirestoreOperation.add);
     

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:protein_tracker/color_schemes.g.dart';
+import 'package:protein_tracker/di/service_locator.dart';
 import 'package:protein_tracker/firebase_options.dart';
 import 'package:protein_tracker/widget_tree.dart';
 
@@ -18,8 +19,11 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+
+  ServiceLocator().setupLocator();
+
   runApp(
-      DevicePreview(enabled: !kReleaseMode, builder: ((context) => const PeachyApp())));
+      DevicePreview(enabled: false, builder: ((context) => const PeachyApp())));
 }
 
 class PeachyApp extends StatelessWidget {
