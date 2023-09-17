@@ -4,7 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
-import 'package:protein_tracker/auth.dart';
+import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/widgets/floating_logo.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,8 +54,9 @@ void logEvent() async {
                 const SizedBox(height: 20),
                 const FloatingLogo(),
                 const Spacer(),
-                if (Platform.isIOS) SignInButton(Buttons.AppleDark, onPressed: () => _signInWithApple()),
-                SignInButton(Buttons.Google, onPressed: () => _handleSignIn()),
+                if (Platform.isIOS) SignInButton(Buttons.AppleDark, onPressed: () => signInWithApple()),
+                SignInButton(Buttons.Google, onPressed: () => signInWithGoogle()),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -64,13 +65,11 @@ void logEvent() async {
     );
   }
 
-  void _handleSignIn() {
-    setState(() {
-      Auth().signInWithGoogle();
-    });
+  void signInWithGoogle() {
+    Auth().signInWithGoogle();
   }
 
-  void _signInWithApple() {
+  void signInWithApple() {
     Auth().signInWithApple();
   }
 }

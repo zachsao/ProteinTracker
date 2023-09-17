@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/food_repository.dart';
-import 'package:protein_tracker/models/meal.dart';
+import 'package:protein_tracker/data/food_repository.dart';
+import 'package:protein_tracker/models/food.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
-import '../food_dialog_content.dart';
+import '../widgets/food_dialog_content.dart';
 import '../widgets/amount_progress.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';

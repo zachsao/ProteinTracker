@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/database.dart';
-import 'package:protein_tracker/firestore.dart';
+import 'package:protein_tracker/data/firestore.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
-import 'models/meal.dart';
+import '../models/food.dart';
 
 class FoodRepository {
   final FirestoreService firestoreService = FirestoreService();

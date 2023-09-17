@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/auth.dart';
+import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/home/home_page.dart';
 import 'package:protein_tracker/login/login_page.dart';
 

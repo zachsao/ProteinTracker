@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:protein_tracker/auth.dart';
-import 'package:protein_tracker/models/meal.dart';
+import 'package:protein_tracker/data/auth.dart';
+import 'package:protein_tracker/models/food.dart';
 
 class FirestoreService {
   DocumentReference userRef = FirebaseFirestore.instance

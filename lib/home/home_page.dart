@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/home/screen.dart';
-import '../food_repository.dart';
+import '../data/food_repository.dart';
 import '../widgets/peachy_fab.dart';
 
 class HomePage extends StatefulWidget {

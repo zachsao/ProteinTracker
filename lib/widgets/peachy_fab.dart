@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/food_dialog_content.dart';
+import 'package:protein_tracker/widgets/food_dialog_content.dart';
 
-import '../models/meal.dart';
+import '../models/food.dart';
 
 class PeachyFab extends StatefulWidget {
   final Function addFood;

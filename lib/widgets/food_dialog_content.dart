@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/models/meal.dart';
+import 'package:protein_tracker/models/food.dart';
 
 class FoodDialogContent extends StatefulWidget {
   final Function upsertFood;

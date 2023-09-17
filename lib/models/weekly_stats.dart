@@ -1,4 +1,4 @@
-import 'meal.dart';
+import 'food.dart';
 import 'package:collection/collection.dart';
 
 class WeeklyStats {

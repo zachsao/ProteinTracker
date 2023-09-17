@@ -1,5 +1,5 @@
 import 'package:path/path.dart';
-import 'package:protein_tracker/models/meal.dart';
+import 'package:protein_tracker/models/food.dart';
 import 'package:sqflite/sqflite.dart';
 
 class FoodDatabase {
@@ -25,5 +25,14 @@ class FoodDatabase {
       {"name": food.name, "amount": food.amount, "type": food.type.index},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  Future<List<Food>> foods(String query) async {
+    return (await database.query('foods', where: 'name LIKE ?', whereArgs:["$query%"]))
+        .map((Map<String, dynamic> e) => Food(
+            name: e['name'],
+            amount: e['amount'],
+            type: MealType.values[e['type']]))
+        .toList();
   }
 }
