@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/constants/strings.dart';
 import 'package:protein_tracker/daily/food_edit.dart';
 import 'package:protein_tracker/data/food_repository.dart';
 import 'package:protein_tracker/models/food.dart';
@@ -35,7 +36,7 @@ class DailyState extends State<DailyPage> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Center(
-            child: Text('Something went wrong'),
+            child: Text(Strings.errorGeneric),
           );
         }
 
@@ -56,7 +57,7 @@ class DailyState extends State<DailyPage> {
         return Column(
           children: [
             Text(
-              "What did you eat today ?",
+              Strings.homePrompt,
               style: Theme.of(context)
                   .textTheme
                   .titleLarge

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/constants/strings.dart';
 
 class UpdateGoalDialog extends StatefulWidget {
   final Function updateGoal;
@@ -28,7 +29,7 @@ class _UpdateGoalDialogState extends State<UpdateGoalDialog> {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () => showUpdateDialog(context),
-      child: const Text("Edit goal"),
+      child: const Text(Strings.editGoalButton),
     );
   }
 

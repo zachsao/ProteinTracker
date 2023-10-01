@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/constants/strings.dart';
 import 'package:protein_tracker/models/food.dart';
 import 'package:protein_tracker/widgets/meal_dropdown.dart';
 
@@ -45,17 +46,18 @@ class AddFoodState extends State<AddFood> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Add an item",
+            Strings.addFood,
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           const SizedBox(height: 16),
-          buildTextEdit(nameController, "Name"),
+          buildTextEdit(nameController, Strings.nameLabel),
           const SizedBox(height: 16),
-          buildTextEdit(amountController, "Protein amount (g)",
+          buildTextEdit(amountController, Strings.amountLabel,
               textInputType: TextInputType.number, maxLength: 4),
           const SizedBox(height: 16),
           MealDropDown(
             initialValue: dropdownValue,
+            width: MediaQuery.of(context).size.width - 32,
             onSelected: (value) => setState(() {
               dropdownValue = value!;
             }),
@@ -63,7 +65,7 @@ class AddFoodState extends State<AddFood> {
           const SizedBox(height: 16),
           CupertinoButton.filled(
               onPressed: isValid() ? sendFood : null,
-              child: const Text("save")),
+              child: const Text(Strings.saveButton)),
           const SizedBox(height: 64),
         ],
       ),
