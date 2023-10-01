@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/models/food.dart';
+import 'package:protein_tracker/widgets/meal_dropdown.dart';
 
 class FoodEdit extends StatefulWidget {
   final Food food;
@@ -56,7 +57,16 @@ class _FoodEditState extends State<FoodEdit> {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 16),
-            buildEditRow(context, "Meal", buildMealDropdown()),
+            buildEditRow(
+              context,
+              "Meal",
+              MealDropDown(
+                initialValue: dropdownValue,
+                onSelected: (value) => setState(() {
+                  dropdownValue = value!;
+                })
+              ),
+            ),
             const SizedBox(height: 16),
             buildEditRow(context, "Protein amount (g)", buildAmountTextEdit()),
             const SizedBox(height: 16),
@@ -78,20 +88,6 @@ class _FoodEditState extends State<FoodEdit> {
         content
       ],
     );
-  }
-
-  DropdownMenu<MealType> buildMealDropdown() {
-    return DropdownMenu<MealType>(
-        initialSelection: dropdownValue,
-        dropdownMenuEntries: MealType.values.map((MealType type) {
-          return DropdownMenuEntry<MealType>(value: type, label: type.name);
-        }).toList(),
-        onSelected: (MealType? value) {
-          setState(() {
-            dropdownValue = value!;
-            onPressed = hasChanged() ? sendFood : null;
-          });
-        });
   }
 
   Container buildAmountTextEdit() {

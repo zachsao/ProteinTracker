@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/widgets/food_dialog_content.dart';
+import 'package:protein_tracker/widgets/add_food.dart';
 
 import '../models/food.dart';
 
@@ -15,18 +15,25 @@ class PeachyFab extends StatefulWidget {
 }
 
 class _PeachyFabState extends State<PeachyFab> {
-
-  void addFood(Food newFood, Food? oldFood) {
+  Future<void> addFood(Food newFood) async {
     widget.addFood(newFood);
   }
 
   Future<void> _showMyDialog(BuildContext context) {
-    return showDialog<void>(
+    return showModalBottomSheet(
       context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return FoodDialogContent(upsertFood: addFood, food: null,);
-      },
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      builder: (context) => AddFood(
+        addFood: (food) async {
+          await addFood(food);
+          if (context.mounted) Navigator.pop(context);
+        },
+      ),
     );
   }
 
