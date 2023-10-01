@@ -146,8 +146,8 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				E82941A7ACE707D147E8386F /* [CP] Embed Pods Frameworks */,
 				82F86F5724F78DB3F248A8AA /* [CP] Copy Pods Resources */,
 				A1072E7FC9BFF6D279D7243E /* [firebase_crashlytics] Crashlytics Upload Symbols */,
@@ -177,7 +177,7 @@
 				};
 			};
 			buildConfigurationList = 97C146E91CF9000F007C117D /* Build configuration list for PBXProject "Runner" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

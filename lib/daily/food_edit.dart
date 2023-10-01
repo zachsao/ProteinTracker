@@ -1,0 +1,116 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:protein_tracker/models/food.dart';
+
+class FoodEdit extends StatefulWidget {
+  final Food food;
+  final Function updateEntry;
+
+  const FoodEdit({
+    super.key,
+    required this.food,
+    required this.updateEntry,
+  });
+
+  @override
+  State<FoodEdit> createState() => _FoodEditState();
+}
+
+class _FoodEditState extends State<FoodEdit> {
+  late MealType dropdownValue;
+  late TextEditingController controller;
+
+  void Function()? onPressed;
+
+  bool hasChanged() {
+    return dropdownValue != widget.food.type ||
+        int.parse(controller.text) != widget.food.amount;
+  }
+
+  void sendFood() async {
+    Food newFood = Food(
+        name: widget.food.name,
+        amount: int.parse(controller.text),
+        type: dropdownValue,
+        id: widget.food.id);
+    widget.updateEntry(newFood, widget.food);
+  }
+
+  @override
+  void initState() {
+    dropdownValue = widget.food.type;
+    controller = TextEditingController(text: widget.food.amount.toString());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: IntrinsicHeight(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.food.name,
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 16),
+            buildEditRow(context, "Meal", buildMealDropdown()),
+            const SizedBox(height: 16),
+            buildEditRow(context, "Protein amount (g)", buildAmountTextEdit()),
+            const SizedBox(height: 16),
+            CupertinoButton.filled(
+                onPressed: onPressed, child: const Text("save")),
+            const SizedBox(height: 64),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Row buildEditRow(BuildContext context, String label, Widget content) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        content
+      ],
+    );
+  }
+
+  DropdownMenu<MealType> buildMealDropdown() {
+    return DropdownMenu<MealType>(
+        initialSelection: dropdownValue,
+        dropdownMenuEntries: MealType.values.map((MealType type) {
+          return DropdownMenuEntry<MealType>(value: type, label: type.name);
+        }).toList(),
+        onSelected: (MealType? value) {
+          setState(() {
+            dropdownValue = value!;
+            onPressed = hasChanged() ? sendFood : null;
+          });
+        });
+  }
+
+  Container buildAmountTextEdit() {
+    return Container(
+      constraints: const BoxConstraints(minWidth: 50),
+      child: IntrinsicWidth(
+        child: TextField(
+          controller: controller,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          onChanged: (value) {
+            setState(() {
+              onPressed = hasChanged() ? sendFood : null;
+            });
+          },
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(), counterText: ""),
+        ),
+      ),
+    );
+  }
+}
