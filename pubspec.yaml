@@ -45,8 +45,6 @@ dependencies:
   firebase_analytics: ^10.4.4
   syncfusion_flutter_charts: ^21.2.4
   device_preview: ^1.1.0
-  sqflite: ^2.3.0
-  path: ^1.8.3
   get_it: ^7.6.4
   flutter_native_splash: ^2.2.16
 

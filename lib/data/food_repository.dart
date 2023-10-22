@@ -1,14 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get_it/get_it.dart';
-import 'package:protein_tracker/data/database.dart';
 import 'package:protein_tracker/data/firestore.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import '../models/food.dart';
 
 class FoodRepository {
-  final FirestoreService firestoreService = FirestoreService();
+  final FirestoreService firestoreService = GetIt.I.get();
   StreamingSharedPreferences? prefs;
 
   FoodRepository() {
@@ -23,6 +22,10 @@ class FoodRepository {
     return firestoreService.getFoods();
   }
 
+  Future<QuerySnapshot<Food>> foodHistory() {
+    return firestoreService.foodHistory();
+  }
+
   Future<QuerySnapshot<Food>> getWeeklyData() {
     return firestoreService.getWeeklyData();
   }
@@ -32,7 +35,7 @@ class FoodRepository {
   }
 
   Future<void> addFood(Food food) async {
-    await firestoreService.addFood(food, () => GetIt.I<FoodDatabase>().insert(food) ) ;
+    await firestoreService.addFood(food) ;
 
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(food, null, goal, FirestoreOperation.add);

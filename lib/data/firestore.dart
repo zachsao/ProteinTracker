@@ -7,21 +7,26 @@ class FirestoreService {
       .collection("users")
       .doc(Auth().currentUser!.uid);
 
+  FirestoreService init() {
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+    return this;
+  }
+
   Future<void> saveUser(Map<String, dynamic> user) async {
     userRef.set(user);
   }
 
-  Future<void> addFood(Food food, Future<void> Function() onSuccess) async {
+  Future<void> addFood(Food food) async {
     userRef
         .collection('foods')
         .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
         )
-        .add(food)
-        .then((_) {
-          onSuccess();
-        });
+        .add(food);
   }
 
   Future<void> updateFood(Food food) async {
@@ -120,6 +125,16 @@ class FirestoreService {
           toFirestore: ((Food food, options) => food.toFirestore()),
         )
         .snapshots();
+  }
+
+  Future<QuerySnapshot<Food>> foodHistory() {
+    return userRef
+        .collection('foods')
+        .withConverter(
+          fromFirestore: Food.fromFirestore,
+          toFirestore: ((Food food, options) => food.toFirestore()),
+        )
+        .get(const GetOptions(source: Source.cache));
   }
 
   Future<void> delete(Food food) async {
