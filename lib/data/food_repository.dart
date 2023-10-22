@@ -17,13 +17,23 @@ class FoodRepository {
   void initPrefs() async {
     prefs = await StreamingSharedPreferences.instance;
   }
-  
+
   Stream<QuerySnapshot<Food>> getFoods() {
     return firestoreService.getFoods();
   }
 
-  Future<QuerySnapshot<Food>> foodHistory() {
-    return firestoreService.foodHistory();
+
+  Future<List<Food>> foodHistory() {
+    return firestoreService
+        .foodHistory()
+        .then((snapshot) {
+          var history = snapshot.docs.map((doc) => doc.data()).toList();
+          // history sorted by most recent
+          history.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+          // if multiple foods have the same name, we want to keep the most recent one
+          var historyMap = Map.fromEntries(history.map((e) => MapEntry(e.name, e)));
+          return historyMap.values.toList();
+        });
   }
 
   Future<QuerySnapshot<Food>> getWeeklyData() {
@@ -35,11 +45,12 @@ class FoodRepository {
   }
 
   Future<void> addFood(Food food) async {
-    await firestoreService.addFood(food) ;
+    await firestoreService.addFood(food);
 
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(food, null, goal, FirestoreOperation.add);
-    
+    await firestoreService.updateStats(
+        food, null, goal, FirestoreOperation.add);
+
     await FirebaseAnalytics.instance.logEvent(name: "Add food", parameters: {
       "name": food.name,
       "meal": food.type.name,
@@ -50,7 +61,8 @@ class FoodRepository {
   Future<void> updateFood(Food newFood, Food oldFood) async {
     await firestoreService.updateFood(newFood);
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(newFood, oldFood,goal, FirestoreOperation.update);
+    await firestoreService.updateStats(
+        newFood, oldFood, goal, FirestoreOperation.update);
     await FirebaseAnalytics.instance.logEvent(name: "Update food", parameters: {
       "new name": newFood.name,
       "new meal": newFood.type.name,
@@ -61,15 +73,15 @@ class FoodRepository {
   Future<void> delete(Food food) async {
     await firestoreService.delete(food);
     int goal = getDailyGoal().getValue();
-    await firestoreService.updateStats(food, null, goal, FirestoreOperation.delete);
+    await firestoreService.updateStats(
+        food, null, goal, FirestoreOperation.delete);
     await FirebaseAnalytics.instance.logEvent(name: "delete food");
   }
 
   void updateDailyGoal(int newGoal) async {
     prefs!.setInt('daily_goal', newGoal);
-    await FirebaseAnalytics.instance.logEvent(name: "Update goal", parameters: {
-      "newGoal": newGoal
-    });
+    await FirebaseAnalytics.instance
+        .logEvent(name: "Update goal", parameters: {"newGoal": newGoal});
   }
 
   Preference<int> getDailyGoal() {

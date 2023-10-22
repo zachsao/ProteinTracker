@@ -64,6 +64,7 @@ class _FoodEditState extends State<FoodEdit> {
                 initialValue: dropdownValue,
                 onSelected: (value) => setState(() {
                   dropdownValue = value!;
+                  onPressed = hasChanged() ? sendFood : null;
                 })
               ),
             ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:protein_tracker/models/food.dart';
 
 class MealDropDown extends StatelessWidget {
-  final MealType initialValue;
+  final MealType? initialValue;
   final void Function(MealType?) onSelected;
   final double? width;
 
   const MealDropDown(
-      {super.key, required this.initialValue, required this.onSelected, this.width});
+      {super.key, required this.onSelected, this.width, this.initialValue});
 
   @override
   Widget build(BuildContext context) {

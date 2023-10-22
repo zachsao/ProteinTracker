@@ -22,6 +22,9 @@ class _PeachyFabState extends State<PeachyFab> {
   Future<void> _showMyDialog(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(15),
