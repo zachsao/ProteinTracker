@@ -37,6 +37,7 @@ class PeachyApp extends StatelessWidget {
       builder: DevicePreview.appBuilder,
       theme: ThemeData(
         colorScheme: lightColorScheme,
+        useMaterial3: true
       ),
       home: const Scaffold(
         body: WidgetTree(),
