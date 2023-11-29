@@ -3,10 +3,6 @@ import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/models/food.dart';
 
 class FirestoreService {
-  DocumentReference userRef = FirebaseFirestore.instance
-      .collection("users")
-      .doc(Auth().currentUser!.uid);
-
   FirestoreService init() {
     FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,
@@ -16,11 +12,11 @@ class FirestoreService {
   }
 
   Future<void> saveUser(Map<String, dynamic> user) async {
-    userRef.set(user);
+    userRef().set(user);
   }
 
   Future<void> addFood(Food food) async {
-    userRef
+    userRef()
         .collection('foods')
         .withConverter(
           fromFirestore: Food.fromFirestore,
@@ -30,7 +26,7 @@ class FirestoreService {
   }
 
   Future<void> updateFood(Food food) async {
-    userRef
+    userRef()
         .collection('foods')
         .doc(food.id)
         .withConverter(
@@ -46,7 +42,7 @@ class FirestoreService {
 
   Future<void> updateStats(
       Food food, Food? oldFood, int goal, FirestoreOperation operation) async {
-    var statsCollection = userRef.collection('stats');
+    var statsCollection = userRef().collection('stats');
     // set or update today's total amount
     int amount;
     switch (operation) {
@@ -70,7 +66,7 @@ class FirestoreService {
 
   void updateStreakCounter(int goal) async {
     // Get totals from last 2 days
-    var statsCollection = userRef.collection('stats');
+    var statsCollection = userRef().collection('stats');
     var yesterday = today().subtract(const Duration(days: 1));
     var docs = (await statsCollection.where(FieldPath.documentId,
             whereIn: ["${today()}", "$yesterday"]).get())
@@ -117,7 +113,7 @@ class FirestoreService {
 
   Stream<QuerySnapshot<Food>> getFoods() {
     var todayTimestamp = Timestamp.fromDate(today());
-    return userRef
+    return userRef()
         .collection('foods')
         .where("createdAt", isGreaterThan: todayTimestamp)
         .withConverter(
@@ -128,7 +124,7 @@ class FirestoreService {
   }
 
   Future<QuerySnapshot<Food>> foodHistory() {
-    return userRef
+    return userRef()
         .collection('foods')
         .withConverter(
           fromFirestore: Food.fromFirestore,
@@ -138,12 +134,12 @@ class FirestoreService {
   }
 
   Future<void> delete(Food food) async {
-    await userRef.collection('foods').doc(food.id!).delete();
+    await userRef().collection('foods').doc(food.id!).delete();
   }
 
   Future<QuerySnapshot<Food>> getWeeklyData() {
     DateTime weekStart = today().subtract(Duration(days: today().weekday - 1));
-    return userRef
+    return userRef()
         .collection('foods')
         .where("createdAt", isGreaterThan: Timestamp.fromDate(weekStart))
         .withConverter(
@@ -153,7 +149,7 @@ class FirestoreService {
   }
 
   Future<int> getStreak() async {
-    var docs = (await userRef
+    var docs = (await userRef()
             .collection("stats")
             .where(FieldPath.documentId, isEqualTo: "streak")
             .get())
@@ -171,15 +167,19 @@ class FirestoreService {
   }
 
   Future<void> deleteUser() async {
-    userRef.delete();
+    userRef().delete();
   }
 
   void resetCounter() async {
-    await userRef
+    await userRef()
         .collection('stats')
         .doc("streak")
         .set({"count": 0, "lastUpdate": ""});
   }
+
+  DocumentReference userRef() => FirebaseFirestore.instance
+      .collection("users")
+      .doc(Auth().currentUser!.uid);
 }
 
 enum FirestoreOperation { add, delete, update }
