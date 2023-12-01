@@ -179,7 +179,7 @@ class FirestoreService {
 
   DocumentReference userRef() => FirebaseFirestore.instance
       .collection("users")
-      .doc(Auth().currentUser!.uid);
+      .doc(Auth.get().currentUser!.uid);
 }
 
 enum FirestoreOperation { add, delete, update }

@@ -114,11 +114,11 @@ class WeeklyState extends State<WeeklyPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
-              child: OutlinedButton(onPressed: () => Auth().signOut(), child: const Text("Sign out",),),
+              child: OutlinedButton(onPressed: () => Auth.get().signOut(), child: const Text("Sign out",),),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: OutlinedButton(onPressed: () => Auth().deleteUser(), child: Text("Delete account", style: TextStyle(color: Theme.of(context).colorScheme.error),),),
+              child: OutlinedButton(onPressed: () => Auth.get().deleteUser(), child: Text("Delete account", style: TextStyle(color: Theme.of(context).colorScheme.error),),),
             ),
             const SizedBox(height: 32,)
           ],

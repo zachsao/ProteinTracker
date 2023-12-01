@@ -66,10 +66,10 @@ void logEvent() async {
   }
 
   void signInWithGoogle() {
-    Auth().signInWithGoogle();
+    Auth.get().signInWithGoogle();
   }
 
   void signInWithApple() {
-    Auth().signInWithApple();
+    Auth.get().signInWithApple();
   }
 }

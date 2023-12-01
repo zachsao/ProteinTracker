@@ -10,7 +10,7 @@ class WidgetTree extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return StreamBuilder(
-      stream: Auth().authStateChanges,
+      stream: Auth.get().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return const HomePage();
