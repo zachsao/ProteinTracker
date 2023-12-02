@@ -136,11 +136,16 @@ class DailyState extends State<DailyPage> {
                   topRight: Radius.circular(15),
                 ),
               ),
-              builder: (context) => FoodEdit(
-                  food: food, updateEntry: (food, updatedFood) async {
-                    await widget.repository.updateFood(food, updatedFood);
-                    if(context.mounted) Navigator.pop(context);
-                  }));
+              isScrollControlled: true,
+              builder: (context) => Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: FoodEdit(
+                    food: food, updateEntry: (food, updatedFood) async {
+                      await widget.repository.updateFood(food, updatedFood);
+                      if(context.mounted) Navigator.pop(context);
+                    }),
+              ));
         },
       ),
     );

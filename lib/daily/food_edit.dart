@@ -74,7 +74,7 @@ class _FoodEditState extends State<FoodEdit> {
             const SizedBox(height: 16),
             CupertinoButton.filled(
                 onPressed: onPressed, child: const Text(Strings.saveButton)),
-            const SizedBox(height: 64),
+            const SizedBox(height: 16),
           ],
         ),
       ),

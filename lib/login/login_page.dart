@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
@@ -43,13 +44,15 @@ void logEvent() async {
                       fontStyle: FontStyle.italic),
                 ),
                 const SizedBox(height: 20),
-                Text(
-                  "Get\nPeachy.",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w100,
-                      color:
-                          Theme.of(context).colorScheme.primary.withAlpha(200),
-                      fontSize: 85),
+                Expanded(
+                  child: AutoSizeText(
+                    "Get\nPeachy.",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w100,
+                        color:
+                            Theme.of(context).colorScheme.primary.withAlpha(200),
+                        fontSize: 85),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const FloatingLogo(),
