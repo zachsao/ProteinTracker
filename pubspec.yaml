@@ -60,16 +60,20 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.10.0
 
+# run `flutter pub run flutter_launcher_icons:main` to apply changes
 flutter_icons:
   android: false
   ios: true
   image_path: "images/logo.png"
 
+# run `dart run flutter_native_splash:create` to apply changes
 flutter_native_splash:
   color: "#F7AA8A"
   image: images/logo.png
-  #android: false
-  ios: true
+  android_12:
+    color: "#F7AA8A"
+    image: images/logo_android12.png
+  web: false
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
