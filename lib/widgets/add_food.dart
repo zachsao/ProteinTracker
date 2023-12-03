@@ -19,10 +19,11 @@ class AddFoodState extends State<AddFood> {
   late TextEditingController amountController;
   MealType? dropdownValue;
   late List<Food> history = [];
+  String? amountErrorText;
 
   bool isValid() {
     if (int.tryParse(amountController.text) == null) return false;
-    return nameController.text.isNotEmpty && amountController.text.isNotEmpty && dropdownValue != null;
+    return nameController.text.isNotEmpty && int.parse(amountController.text) >= 0 && dropdownValue != null;
   }
 
   void sendFood() async {
@@ -63,7 +64,7 @@ class AddFoodState extends State<AddFood> {
           buildTextEdit(nameController, Strings.nameLabel),
           const SizedBox(height: 16),
           buildTextEdit(amountController, Strings.amountLabel,
-              textInputType: TextInputType.number, maxLength: 4),
+              textInputType: TextInputType.number, maxLength: 4, errorText: amountErrorText),
           const SizedBox(height: 16),
           MealDropDown(
             initialValue: dropdownValue,
@@ -116,18 +117,33 @@ class AddFoodState extends State<AddFood> {
   }
 
   TextField buildTextEdit(TextEditingController controller, String label,
-      {TextInputType? textInputType, int? maxLength}) {
+      {TextInputType? textInputType, int? maxLength, String? errorText}) {
     return TextField(
       controller: controller,
       keyboardType: textInputType,
       maxLength: maxLength,
       onChanged: (value) {
-        setState(() {});
+        setState(() {
+          if (amountController.text.isEmpty) {
+            amountErrorText = null;
+            return;
+          }
+          if (int.tryParse(amountController.text) == null) {
+            amountErrorText = Strings.errorAmountNotInteger;
+            return;
+          }
+          if (int.parse(amountController.text) < 0) {
+            amountErrorText = Strings.errorAmountNegative;
+          } else {
+            amountErrorText = null;
+          }
+        });
       },
       decoration: InputDecoration(
           border: const OutlineInputBorder(),
           counterText: "",
-          labelText: label),
+          labelText: label,
+          errorText: errorText),
     );
   }
 }
