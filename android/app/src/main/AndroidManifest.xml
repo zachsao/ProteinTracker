@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.protein_tracker">
+    package="com.zachsao.peachy">
    <application
         android:label="protein_tracker"
         android:name="${applicationName}"

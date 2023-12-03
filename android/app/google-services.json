@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:509089469622:android:46c5519ae7aeccca6c8217",
+        "mobilesdk_app_id": "1:509089469622:android:630ad59952bd26d46c8217",
         "android_client_info": {
-          "package_name": "com.example.protein_tracker"
+          "package_name": "com.zachsao.peachy"
         }
       },
       "oauth_client": [

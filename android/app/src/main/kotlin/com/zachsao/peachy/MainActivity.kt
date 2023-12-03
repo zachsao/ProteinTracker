@@ -1,4 +1,4 @@
-package com.example.protein_tracker
+package com.zachsao.peachy
 
 import io.flutter.embedding.android.FlutterActivity
 
