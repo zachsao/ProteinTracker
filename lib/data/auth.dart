@@ -51,7 +51,7 @@ class Auth {
     var user = <String, dynamic>{
       "email": currentUser?.email
     };
-    await FirestoreService().saveUser(user);
+    await FirestoreService.get().saveUser(user);
   }
 
   Future<void> signOut() {
@@ -59,7 +59,7 @@ class Auth {
   }
 
   Future<void> deleteUser() async {
-    await FirestoreService().deleteUser();
+    await FirestoreService.get().deleteUser();
     await currentUser?.delete();
   }
 }

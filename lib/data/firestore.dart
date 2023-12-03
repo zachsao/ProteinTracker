@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/models/food.dart';
 
@@ -10,6 +11,8 @@ class FirestoreService {
     );
     return this;
   }
+
+  static FirestoreService get() => GetIt.I.get();
 
   Future<void> saveUser(Map<String, dynamic> user) async {
     userRef().set(user);
