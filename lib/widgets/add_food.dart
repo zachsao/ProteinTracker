@@ -27,7 +27,7 @@ class AddFoodState extends State<AddFood> {
 
   void sendFood() async {
     Food newFood = Food(
-        name: nameController.text,
+        name: nameController.text.trim(),
         amount: int.parse(amountController.text),
         type: dropdownValue!);
     widget.addFood(newFood);
