@@ -114,11 +114,13 @@ class FirestoreService {
     }
   }
 
-  Stream<QuerySnapshot<Food>> getFoods() {
-    var todayTimestamp = Timestamp.fromDate(today());
+  Stream<QuerySnapshot<Food>> getFoods(DateTime date) {
+    DateTime endOfDay = date.add(const Duration(days: 1)).subtract(const Duration(milliseconds: 1));
+
     return userRef()
         .collection('foods')
-        .where("createdAt", isGreaterThan: todayTimestamp)
+        .where("createdAt", isGreaterThanOrEqualTo: Timestamp.fromDate(date))
+        .where("createdAt", isLessThan: Timestamp.fromDate(endOfDay))
         .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),

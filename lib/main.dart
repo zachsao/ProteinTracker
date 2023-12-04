@@ -4,6 +4,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/rendering.dart';
 import 'package:protein_tracker/color_schemes.g.dart';
 import 'package:protein_tracker/di/service_locator.dart';
 import 'package:protein_tracker/firebase_options.dart';
@@ -31,6 +32,9 @@ class PeachyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // showLayoutBounds
+    debugPaintSizeEnabled = false;
+    
     return MaterialApp(
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),

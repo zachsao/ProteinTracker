@@ -18,8 +18,8 @@ class FoodRepository {
     prefs = await StreamingSharedPreferences.instance;
   }
 
-  Stream<QuerySnapshot<Food>> getFoods() {
-    return firestoreService.getFoods();
+  Stream<QuerySnapshot<Food>> getFoods(DateTime date) {
+    return firestoreService.getFoods(date);
   }
 
 

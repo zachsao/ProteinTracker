@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/constants/strings.dart';
 import 'package:protein_tracker/daily/food_edit.dart';
+import 'package:protein_tracker/data/date_model.dart';
 import 'package:protein_tracker/data/food_repository.dart';
 import 'package:protein_tracker/models/food.dart';
 import 'package:protein_tracker/widgets/update_goal_dialog.dart';
 import '../widgets/amount_progress.dart';
 import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:provider/provider.dart';
 
 class DailyPage extends StatefulWidget {
   final FoodRepository repository;
@@ -31,8 +33,10 @@ class DailyState extends State<DailyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: widget.repository.getFoods(),
+    return Consumer<DateModel>(
+      builder: (context, dateModel, child) {
+        return StreamBuilder<QuerySnapshot>(
+      stream: widget.repository.getFoods(dateModel.date),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return const Center(
@@ -56,14 +60,37 @@ class DailyState extends State<DailyPage> {
 
         return Column(
           children: [
-            Text(
-              Strings.homePrompt,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w300),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    dateModel.setDate(dateModel.date.subtract(const Duration(days: 1)));
+                  },
+                ),
+                Text(
+                  dateModel.formattedDate,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  textAlign: TextAlign.center,
+                ),
+                Visibility(
+                  maintainSize: true,
+                  maintainAnimation: true,
+                  maintainState: true,
+                    visible: dateModel.date.isBefore(dateModel.today),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_forward_ios),
+                      onPressed: () {
+                        dateModel.setDate(dateModel.date.add(const Duration(days: 1)));
+                      },
+                    ),
+                  ),
+                  
+              ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             AmountProgress(
               total: total,
               goal: widget.repository.getDailyGoal(),
@@ -75,6 +102,8 @@ class DailyState extends State<DailyPage> {
             buildSectionsList(orderedMeals)
           ],
         );
+      },
+    );
       },
     );
   }
@@ -138,14 +167,15 @@ class DailyState extends State<DailyPage> {
               ),
               isScrollControlled: true,
               builder: (context) => Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: FoodEdit(
-                    food: food, updateEntry: (food, updatedFood) async {
-                      await widget.repository.updateFood(food, updatedFood);
-                      if(context.mounted) Navigator.pop(context);
-                    }),
-              ));
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: FoodEdit(
+                        food: food,
+                        updateEntry: (food, updatedFood) async {
+                          await widget.repository.updateFood(food, updatedFood);
+                          if (context.mounted) Navigator.pop(context);
+                        }),
+                  ));
         },
       ),
     );

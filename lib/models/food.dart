@@ -27,13 +27,23 @@ class Food {
       "name": name,
       "amount": amount,
       "type": type.index,
-      "createdAt": Timestamp.now()
+      "createdAt": createdAt ?? Timestamp.now()
     };
   }
 
   Food setId(String id) {
     this.id = id;
     return this;
+  }
+
+  Food copyWith({String? id, String? name, int? amount, MealType? type, Timestamp? createdAt}) {
+    return Food(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      amount: amount ?? this.amount,
+      type: type ?? this.type,
+      createdAt: createdAt ?? this.createdAt,
+    );
   }
 }
 

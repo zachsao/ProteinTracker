@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:protein_tracker/data/date_model.dart';
 import 'package:protein_tracker/widgets/add_food.dart';
+import 'package:provider/provider.dart';
 
 import '../models/food.dart';
 
@@ -20,6 +23,7 @@ class _PeachyFabState extends State<PeachyFab> {
   }
 
   Future<void> _showMyDialog(BuildContext context) {
+    Timestamp createdAt = Provider.of<DateModel>(context, listen: false).timestamp;
     return showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -33,7 +37,7 @@ class _PeachyFabState extends State<PeachyFab> {
       ),
       builder: (context) => AddFood(
         addFood: (food) async {
-          await addFood(food);
+          await addFood(food.copyWith(createdAt: createdAt));
           if (context.mounted) Navigator.pop(context);
         },
       ),
