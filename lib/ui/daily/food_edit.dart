@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/constants/strings.dart';
-import 'package:protein_tracker/models/food.dart';
-import 'package:protein_tracker/widgets/meal_dropdown.dart';
+import 'package:protein_tracker/data/models/food.dart';
+import 'package:protein_tracker/ui/widgets/meal_dropdown.dart';
 
 class FoodEdit extends StatefulWidget {
   final Food food;

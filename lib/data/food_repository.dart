@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/firestore.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
-import '../models/food.dart';
+import 'models/food.dart';
 
 class FoodRepository {
   final FirestoreService firestoreService = GetIt.I.get();

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/auth.dart';
-import 'package:protein_tracker/models/food.dart';
+import 'package:protein_tracker/data/models/food.dart';
 
 class FirestoreService {
   FirestoreService init() {

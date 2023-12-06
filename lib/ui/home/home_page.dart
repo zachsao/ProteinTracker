@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/data/date_model.dart';
-import 'package:protein_tracker/home/screen.dart';
-import '../data/food_repository.dart';
+import 'package:protein_tracker/data/models/date_model.dart';
+import 'package:protein_tracker/ui/home/screen.dart';
+import '../../data/food_repository.dart';
 import '../widgets/peachy_fab.dart';
 import 'package:provider/provider.dart';
 

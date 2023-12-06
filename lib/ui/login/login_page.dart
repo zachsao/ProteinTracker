@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:protein_tracker/data/auth.dart';
-import 'package:protein_tracker/widgets/floating_logo.dart';
+import 'package:protein_tracker/ui/widgets/floating_logo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/data/date_model.dart';
-import 'package:protein_tracker/widgets/add_food.dart';
+import 'package:protein_tracker/data/models/date_model.dart';
+import 'package:protein_tracker/ui/widgets/add_food.dart';
 import 'package:provider/provider.dart';
 
-import '../models/food.dart';
+import '../../data/models/food.dart';
 
 class PeachyFab extends StatefulWidget {
   final Function addFood;

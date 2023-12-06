@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/models/food.dart';
+import 'package:protein_tracker/data/models/food.dart';
 
 class MealDropDown extends StatelessWidget {
   final MealType? initialValue;

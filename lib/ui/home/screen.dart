@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:protein_tracker/data/food_repository.dart';
-import 'package:protein_tracker/daily/daily_page.dart';
-import 'package:protein_tracker/weekly/weekly_page.dart';
+import 'package:protein_tracker/ui/daily/daily_page.dart';
+import 'package:protein_tracker/ui/weekly/weekly_page.dart';
 
 class Screen {
   final IconData icon;

@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/rendering.dart';
-import 'package:protein_tracker/color_schemes.g.dart';
+import 'package:protein_tracker/theme/color_schemes.g.dart';
 import 'package:protein_tracker/di/service_locator.dart';
-import 'package:protein_tracker/firebase_options.dart';
-import 'package:protein_tracker/widgets/widget_tree.dart';
+import 'package:protein_tracker/data/firebase_options.dart';
+import 'package:protein_tracker/ui/widgets/widget_tree.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

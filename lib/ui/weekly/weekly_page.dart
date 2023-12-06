@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/models/weekly_stats.dart';
-import 'package:protein_tracker/weekly/intake_tile.dart';
-import 'package:protein_tracker/weekly/tile.dart';
-import 'package:protein_tracker/weekly/weekly_chart.dart';
-import '../data/food_repository.dart';
-import '../data/auth.dart';
-import '../models/food.dart';
+import 'package:protein_tracker/data/models/weekly_stats.dart';
+import 'package:protein_tracker/ui/weekly/intake_tile.dart';
+import 'package:protein_tracker/ui/weekly/tile.dart';
+import 'package:protein_tracker/ui/weekly/weekly_chart.dart';
+import '../../data/food_repository.dart';
+import '../../data/auth.dart';
+import '../../data/models/food.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 

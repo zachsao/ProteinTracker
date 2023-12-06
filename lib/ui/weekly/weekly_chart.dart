@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../models/food.dart';
+import '../../data/models/food.dart';
 import 'package:intl/intl.dart';
 
 class WeeklyChart extends StatelessWidget {
