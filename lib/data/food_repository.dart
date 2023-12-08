@@ -51,7 +51,7 @@ class FoodRepository {
     await firestoreService.updateStats(
         food, null, goal, FirestoreOperation.add);
 
-    await FirebaseAnalytics.instance.logEvent(name: "Add food", parameters: {
+    await FirebaseAnalytics.instance.logEvent(name: "Add_food", parameters: {
       "name": food.name,
       "meal": food.type.name,
       "amount": food.amount
@@ -63,7 +63,7 @@ class FoodRepository {
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(
         newFood, oldFood, goal, FirestoreOperation.update);
-    await FirebaseAnalytics.instance.logEvent(name: "Update food", parameters: {
+    await FirebaseAnalytics.instance.logEvent(name: "Update_food", parameters: {
       "new name": newFood.name,
       "new meal": newFood.type.name,
       "new amount": newFood.amount
@@ -75,13 +75,13 @@ class FoodRepository {
     int goal = getDailyGoal().getValue();
     await firestoreService.updateStats(
         food, null, goal, FirestoreOperation.delete);
-    await FirebaseAnalytics.instance.logEvent(name: "delete food");
+    await FirebaseAnalytics.instance.logEvent(name: "delete_food");
   }
 
   void updateDailyGoal(int newGoal) async {
     prefs!.setInt('daily_goal', newGoal);
     await FirebaseAnalytics.instance
-        .logEvent(name: "Update goal", parameters: {"newGoal": newGoal});
+        .logEvent(name: "Update_goal", parameters: {"newGoal": newGoal});
   }
 
   Preference<int> getDailyGoal() {
