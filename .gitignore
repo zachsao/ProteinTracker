@@ -565,4 +565,3 @@ $RECYCLE.BIN/
 
 .flutter-plugins-dependencies
 /lib/secrets.dart
-/ios/firebase_app_id_file.json
