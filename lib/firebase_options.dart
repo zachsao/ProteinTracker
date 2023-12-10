@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAOn-Xvl2fIqFGlIbLmv6pM76AMLC6BhdQ',
-    appId: '1:509089469622:android:46c5519ae7aeccca6c8217',
+    appId: '1:509089469622:android:630ad59952bd26d46c8217',
     messagingSenderId: '509089469622',
     projectId: 'protein-tracker-68a13',
     databaseURL: 'https://protein-tracker-68a13-default-rtdb.firebaseio.com',
@@ -65,6 +65,7 @@ class DefaultFirebaseOptions {
     projectId: 'protein-tracker-68a13',
     databaseURL: 'https://protein-tracker-68a13-default-rtdb.firebaseio.com',
     storageBucket: 'protein-tracker-68a13.appspot.com',
+    androidClientId: '509089469622-bket5v9vdf17g173nqn8mvb93602vq70.apps.googleusercontent.com',
     iosClientId: '509089469622-qr7ddt193ecffqdmik6135669rqvlkrq.apps.googleusercontent.com',
     iosBundleId: 'com.zachsao.proteinTracker',
   );

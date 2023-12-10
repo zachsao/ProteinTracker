@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "509089469622-bket5v9vdf17g173nqn8mvb93602vq70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zachsao.peachy",
+            "certificate_hash": "0e3668fbd5c58c6cdb7b228ac0d9223ec3164c83"
+          }
+        },
+        {
           "client_id": "509089469622-7up0jqpmfkun017i37eeh3mrq4gr5lr5.apps.googleusercontent.com",
           "client_type": 3
         }
