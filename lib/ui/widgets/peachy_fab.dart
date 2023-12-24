@@ -22,24 +22,18 @@ class _PeachyFabState extends State<PeachyFab> {
     widget.addFood(newFood);
   }
 
-  Future<void> _showMyDialog(BuildContext context) {
-    Timestamp createdAt = Provider.of<DateModel>(context, listen: false).timestamp;
-    return showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      useSafeArea: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
+  void goToAddFood(BuildContext context) {
+    Timestamp createdAt =
+        Provider.of<DateModel>(context, listen: false).timestamp;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddFood(
+          addFood: (food) async {
+            await addFood(food.copyWith(createdAt: createdAt));
+            if (context.mounted) Navigator.popUntil(context, (route) => route.isFirst);
+          },
         ),
-      ),
-      builder: (context) => AddFood(
-        addFood: (food) async {
-          await addFood(food.copyWith(createdAt: createdAt));
-          if (context.mounted) Navigator.pop(context);
-        },
+        fullscreenDialog: true,
       ),
     );
   }
@@ -51,7 +45,7 @@ class _PeachyFabState extends State<PeachyFab> {
       height: 90,
       child: FittedBox(
         child: FloatingActionButton(
-          onPressed: () => _showMyDialog(context),
+          onPressed: () => goToAddFood(context),
           backgroundColor: Colors.transparent,
           elevation: 0,
           child: const Image(

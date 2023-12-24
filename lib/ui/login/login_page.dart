@@ -38,7 +38,7 @@ void logEvent() async {
                 const SizedBox(height: 42),
                 Text(
                   "Track your protein",
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic),

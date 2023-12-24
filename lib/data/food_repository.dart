@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get_it/get_it.dart';
+import 'package:protein_tracker/data/api/api_service.dart';
 import 'package:protein_tracker/data/firestore.dart';
+import 'package:protein_tracker/data/models/nutrients_request.dart';
+import 'package:protein_tracker/data/models/search_result.dart';
+import 'package:protein_tracker/ui/food_details/food_details.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import 'models/food.dart';
 
 class FoodRepository {
   final FirestoreService firestoreService = GetIt.I.get();
+  final ApiService apiService = GetIt.I.get();
   StreamingSharedPreferences? prefs;
 
   FoodRepository() {
@@ -22,18 +27,15 @@ class FoodRepository {
     return firestoreService.getFoods(date);
   }
 
-
   Future<List<Food>> foodHistory() {
-    return firestoreService
-        .foodHistory()
-        .then((snapshot) {
-          var history = snapshot.docs.map((doc) => doc.data()).toList();
-          // history sorted by most recent
-          history.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
-          // if multiple foods have the same name, we want to keep the most recent one
-          var historyMap = Map.fromEntries(history.map((e) => MapEntry(e.name, e)));
-          return historyMap.values.toList();
-        });
+    return firestoreService.foodHistory().then((snapshot) {
+      var history = snapshot.docs.map((doc) => doc.data()).toList();
+      // history sorted by most recent
+      history.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+      // if multiple foods have the same name, we want to keep the most recent one
+      var historyMap = Map.fromEntries(history.map((e) => MapEntry(e.name, e)));
+      return historyMap.values.toList();
+    });
   }
 
   Future<QuerySnapshot<Food>> getWeeklyData() {
@@ -86,5 +88,31 @@ class FoodRepository {
 
   Preference<int> getDailyGoal() {
     return prefs!.getInt('daily_goal', defaultValue: 150);
+  }
+
+  Future<SearchResult> search(query) async {
+    try {
+      final foodResults =
+          (await apiService.getFoods(query)).body?.hints ?? List.empty();
+      final searchResults = foodResults.map((e) => e.toFoodModel()).toList();
+      return searchResults.isEmpty
+          ? EmptyResult()
+          : ResultsFound(searchResults);
+    } catch (e) {
+      return SearchResult.error;
+    }
+  }
+
+  Future<FoodDetails> getNutrients(String foodId, num quantity) {
+    NutrientsRequest request = NutrientsRequest(ingredients: [
+      Ingredients(
+        foodId: foodId,
+      )
+    ]);
+    return apiService.getNutrients(request).then((response) {
+      if (response.body == null) throw Exception("Body cannot be null");
+      return Nutrients(response.body!.totalNutrients.proteins.quantity)
+          as FoodDetails;
+    }).onError((error, _) => FoodDetails.error);
   }
 }

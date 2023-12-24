@@ -58,49 +58,53 @@ class DailyState extends State<DailyPage> {
         var orderedMeals = Map.fromEntries(meals.entries.toList()
           ..sort((a, b) => a.key.index.compareTo(b.key.index)));
 
-        return Column(
-          children: [
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    dateModel.setDate(dateModel.date.subtract(const Duration(days: 1)));
-                  },
-                ),
-                Text(
-                  dateModel.formattedDate,
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center,
-                ),
-                Visibility(
-                  maintainSize: true,
-                  maintainAnimation: true,
-                  maintainState: true,
-                    visible: dateModel.date.isBefore(dateModel.today),
-                    child: IconButton(
-                      icon: const Icon(Icons.arrow_forward_ios),
-                      onPressed: () {
-                        dateModel.setDate(dateModel.date.add(const Duration(days: 1)));
-                      },
-                    ),
+        // SingleChildScrollView is needed to prevent the RenderFlex overflow error when the keyboard is shown.
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: [
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      dateModel.setDate(dateModel.date.subtract(const Duration(days: 1)));
+                    },
                   ),
-                  
-              ],
-            ),
-            const SizedBox(height: 16),
-            AmountProgress(
-              total: total,
-              goal: widget.repository.getDailyGoal(),
-            ),
-            UpdateGoalDialog(
-              updateGoal: widget.repository.updateDailyGoal,
-            ),
-            const SizedBox(height: 32),
-            buildSectionsList(orderedMeals)
-          ],
+                  Text(
+                    dateModel.formattedDate,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  Visibility(
+                    maintainSize: true,
+                    maintainAnimation: true,
+                    maintainState: true,
+                      visible: dateModel.date.isBefore(dateModel.today),
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_forward_ios),
+                        onPressed: () {
+                          dateModel.setDate(dateModel.date.add(const Duration(days: 1)));
+                        },
+                      ),
+                    ),
+                    
+                ],
+              ),
+              const SizedBox(height: 16),
+              AmountProgress(
+                total: total,
+                goal: widget.repository.getDailyGoal(),
+              ),
+              UpdateGoalDialog(
+                updateGoal: widget.repository.updateDailyGoal,
+              ),
+              const SizedBox(height: 32),
+              buildSectionsList(orderedMeals)
+            ],
+          ),
         );
       },
     );

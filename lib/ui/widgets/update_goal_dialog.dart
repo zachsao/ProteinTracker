@@ -38,7 +38,7 @@ class _UpdateGoalDialogState extends State<UpdateGoalDialog> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Update daily goal"),
+            title: const Text("Update daily goal"),
             content: TextField(
               controller: _textController,
               keyboardType: TextInputType.number,

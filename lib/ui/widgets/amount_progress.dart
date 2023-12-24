@@ -28,7 +28,7 @@ class AmountProgress extends StatelessWidget {
               children: [
                 Text(
                   "$total",
-                  style: Theme.of(context).textTheme.headline2?.copyWith(
+                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primaryContainer),
                 ),
                 Text("of ${goal}g")

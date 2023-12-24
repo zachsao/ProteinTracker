@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:device_preview/device_preview.dart';
+import 'package:logging/logging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +21,7 @@ Future<void> main() async {
     return true;
   };
 
+  setupLogging();
   ServiceLocator().setupLocator();
 
   runApp(
@@ -48,4 +49,11 @@ class PeachyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+void setupLogging() {
+  Logger.root.level = Level.ALL; // Set logging level to log all messages
+  Logger.root.onRecord.listen((rec) {
+    print('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
 }

@@ -7,7 +7,9 @@ class Strings {
   static const String mealLabel = "Meal";
   static const String editGoalButton = "Edit goal";
   static const String saveButton = "Save";
-  static const String errorGeneric = "Something went wrong";
+  static const String errorGeneric = "Something went wrong, check your internet connection.";
   static const String errorAmountNegative = "Amount must be greater than zero";
   static const String errorAmountNotInteger = "Amount must be an integer";
+  static const String searchResultsEmpty = "No results found, try something else.";
+  static const String searchHint = "Search foods";
 }

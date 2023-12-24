@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:protein_tracker/data/models/food_response.dart';
 
 class Food {
   String? id;
@@ -6,6 +7,8 @@ class Food {
   final int amount;
   final MealType type;
   Timestamp? createdAt;
+  String? image;
+  List<MeasureDTO>? measures;
 
   Food({this.id, required this.name, required this.amount, required this.type, this.createdAt});
 

@@ -31,7 +31,7 @@ class Tile extends StatelessWidget {
                 topText,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor, fontWeight: FontWeight.w300),
               ),
-              Text(midText, style: Theme.of(context).textTheme.headline2!.copyWith(color: textColor, fontWeight: FontWeight.w300)),
+              Text(midText, style: Theme.of(context).textTheme.displayMedium!.copyWith(color: textColor, fontWeight: FontWeight.w300)),
               Text(bottomText, style: Theme.of(context).textTheme.titleLarge!.copyWith(color: textColor, fontWeight: FontWeight.w300))
             ],
           ),
