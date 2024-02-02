@@ -175,7 +175,7 @@ class DailyState extends State<DailyPage> {
         backgroundColorActivated: Theme.of(context).colorScheme.primary,
         onTap: () {
           // if food is from API, show details screen
-          if (food.id?.startsWith("food_") ?? false) {
+          if (food.apiId != null) {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => FoodDetailsScreen(

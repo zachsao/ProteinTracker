@@ -29,7 +29,7 @@ class HintDTO {
       _$HintDTOFromJson(json);
 
   Food toFoodModel() => Food(
-        id: food.foodId,
+        apiId: food.foodId,
         name: food.brand != null ? "${food.label} - ${food.brand}" : food.label,
         amount: 0,
         type: MealType.breakfast,

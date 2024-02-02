@@ -20,20 +20,13 @@ class FirestoreService {
   }
 
   Future<void> addFood(Food food) async {
-    var foodsCollectionRef = userRef().collection('foods').withConverter(
+    userRef()
+        .collection('foods')
+        .withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
-        );
-
-    foodsCollectionRef.doc(food.id).set(food).then((value) {
-      // add the measures list if it exists as a subcollection
-      if (food.measures?.isNotEmpty ?? false) {
-        foodsCollectionRef
-            .doc(food.id)
-            .collection("measures")
-            .add({'measures': food.measures?.map((e) => e.toJson())});
-      }
-    });
+        )
+        .add(food);
   }
 
   // Get the measures list from the subcollection
@@ -56,19 +49,13 @@ class FirestoreService {
   }
 
   Future<void> updateFood(Food food) async {
-    userRef()
-        .collection('foods')
-        .doc(food.id)
-        .update({
-      "name": food.name,
+    userRef().collection('foods').doc(food.id).update({
       "amount": food.amount,
       "type": food.type.index,
-      if (food.selectedMeasure != null) 
+      if (food.selectedMeasure != null)
         "selectedMeasure.label": food.selectedMeasure!.label,
-      if (food.selectedMeasure != null) 
+      if (food.selectedMeasure != null)
         "selectedMeasure.weight": food.selectedMeasure!.weight,
-      
-
     });
   }
 

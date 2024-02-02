@@ -37,6 +37,12 @@ class AddFoodState extends State<AddFood> {
     widget.addFood(newFood);
   }
 
+  void quickAdd(Food food) async {
+    Food copy = food.copyWith(type: dropdownValue ?? food.type);
+    copy.id = null;
+    widget.addFood(copy);
+  }
+
   Future<void> fetchHistory() async {
     var cache = (await GetIt.I.get<FoodRepository>().foodHistory());
     setState(() {
@@ -133,10 +139,18 @@ class AddFoodState extends State<AddFood> {
                           subtitle: Text("${history[index].amount}g"),
                           trailing: IconButton.filled(
                             onPressed: () {
-                              setState(() {
-                                nameController.text = history[index].name;
-                                amountController.text = "${history[index].amount}";
-                              });
+                              quickAdd(history[index]);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "${history[index].name} added to ${dropdownValue?.name ?? history[index].type.name}",
+                                      style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                                      ),
+
+                                      behavior: SnackBarBehavior.floating,
+                                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                ),
+                              );
                             },
                             icon: Icon(
                               Icons.add,

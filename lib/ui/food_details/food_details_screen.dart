@@ -23,7 +23,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   final TextEditingController controller = TextEditingController();
   final TextEditingController measureController = TextEditingController();
   late num proteinPerGram;
-  late List<MeasureDTO> measures;
   MealType selectedMealType = MealType.breakfast;
   MeasureDTO? selectedMeasure;
   int proteinAmount = 0;
@@ -46,15 +45,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
 
   @override
   void initState() {
-    futureNutrients = (widget.food.measures == null
-            ? GetIt.I.get<FoodRepository>().getMeasures(widget.food.id!)
-            : Future.sync(() => widget.food.measures!))
-        .then((value) {
-      measures = value;
-      return GetIt.I
-          .get<FoodRepository>()
-          .getNutrients(widget.food.id!, value[0].weight);
-    }).then((FoodDetails value) {
+    futureNutrients = GetIt.I
+        .get<FoodRepository>()
+        .getNutrients(widget.food.apiId!, widget.food.measures![0].weight)
+        .then((FoodDetails value) {
       if (widget.food.selectedMeasure != null) {
         selectedMeasure = widget.food.selectedMeasure;
         controller.text =
@@ -144,7 +138,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                             initialSelection: widget.food.selectedMeasure,
                             controller: measureController,
                             dropdownMenuEntries:
-                                measures.map((MeasureDTO measure) {
+                                widget.food.measures!.map((MeasureDTO measure) {
                               return DropdownMenuEntry<MeasureDTO>(
                                 value: measure,
                                 label: measure.label!,
