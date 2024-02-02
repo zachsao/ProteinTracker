@@ -11,7 +11,8 @@ class FoodDetailsScreen extends StatefulWidget {
   final Food food;
   final Function addFood;
 
-  const FoodDetailsScreen({Key? key, required this.food, required this.addFood}) : super(key: key);
+  const FoodDetailsScreen({Key? key, required this.food, required this.addFood})
+      : super(key: key);
 
   @override
   State<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
@@ -19,8 +20,10 @@ class FoodDetailsScreen extends StatefulWidget {
 
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   late Future<FoodDetails> futureNutrients;
-  late TextEditingController controller;
+  final TextEditingController controller = TextEditingController();
+  final TextEditingController measureController = TextEditingController();
   late num proteinPerGram;
+  late List<MeasureDTO> measures;
   MealType selectedMealType = MealType.breakfast;
   MeasureDTO? selectedMeasure;
   int proteinAmount = 0;
@@ -35,18 +38,32 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   void saveFood() async {
     Food food = widget.food.copyWith(
       amount: proteinAmount,
-      type: selectedMealType
+      type: selectedMealType,
+      selectedMeasure: selectedMeasure,
     );
     widget.addFood(food);
   }
 
   @override
   void initState() {
-    controller = TextEditingController();
-    futureNutrients = GetIt.I.get<FoodRepository>().getNutrients(
-          widget.food.id!,
-          widget.food.measures![0].weight,
-        );
+    futureNutrients = (widget.food.measures == null
+            ? GetIt.I.get<FoodRepository>().getMeasures(widget.food.id!)
+            : Future.sync(() => widget.food.measures!))
+        .then((value) {
+      measures = value;
+      return GetIt.I
+          .get<FoodRepository>()
+          .getNutrients(widget.food.id!, value[0].weight);
+    }).then((FoodDetails value) {
+      if (widget.food.selectedMeasure != null) {
+        selectedMeasure = widget.food.selectedMeasure;
+        controller.text =
+            "${(widget.food.amount / selectedMeasure!.weight / (value as Nutrients).proteins).round()}";
+        proteinAmount = widget.food.amount;
+        selectedMealType = widget.food.type;
+      }
+      return value;
+    });
     super.initState();
   }
 
@@ -60,7 +77,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: (selectedMeasure == null || controller.text.isEmpty) ? null : saveFood,
+            onPressed: (selectedMeasure == null || controller.text.isEmpty)
+                ? null
+                : saveFood,
             child: const Text(Strings.saveButton),
           )
         ],
@@ -78,7 +97,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   snapshot.data is Error) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset("images/network_error.png",
                         width: 100, height: 100),
@@ -93,12 +111,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       widget.food.name,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 32),
                     Row(
@@ -124,9 +140,11 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         ),
                         const SizedBox(width: 16),
                         DropdownMenu<MeasureDTO>(
-                            hintText: "Measure",
+                            label: const Text("Measure"),
+                            initialSelection: widget.food.selectedMeasure,
+                            controller: measureController,
                             dropdownMenuEntries:
-                                widget.food.measures!.map((MeasureDTO measure) {
+                                measures.map((MeasureDTO measure) {
                               return DropdownMenuEntry<MeasureDTO>(
                                 value: measure,
                                 label: measure.label!,

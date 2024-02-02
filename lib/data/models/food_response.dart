@@ -68,4 +68,16 @@ class MeasureDTO {
       _$MeasureDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$MeasureDTOToJson(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MeasureDTO &&
+        other.weight == weight &&
+        other.label == label;
+  }
+
+  @override
+  int get hashCode => weight.hashCode ^ label.hashCode;
 }

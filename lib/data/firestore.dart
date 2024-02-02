@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/data/models/food.dart';
+import 'package:protein_tracker/data/models/food_response.dart';
 
 class FirestoreService {
   FirestoreService init() {
@@ -19,28 +20,56 @@ class FirestoreService {
   }
 
   Future<void> addFood(Food food) async {
-    userRef()
-        .collection('foods')
-        .withConverter(
+    var foodsCollectionRef = userRef().collection('foods').withConverter(
           fromFirestore: Food.fromFirestore,
           toFirestore: ((Food food, options) => food.toFirestore()),
-        )
-        .add(food);
+        );
+
+    foodsCollectionRef.doc(food.id).set(food).then((value) {
+      // add the measures list if it exists as a subcollection
+      if (food.measures?.isNotEmpty ?? false) {
+        foodsCollectionRef
+            .doc(food.id)
+            .collection("measures")
+            .add({'measures': food.measures?.map((e) => e.toJson())});
+      }
+    });
+  }
+
+  // Get the measures list from the subcollection
+  Future<List<MeasureDTO>> getMeasures(String foodId) {
+    return userRef()
+        .collection('foods')
+        .where("id", isEqualTo: foodId)
+        .get()
+        .then((querySnapshot) {
+      return Future.wait(querySnapshot.docs.map((doc) {
+        return doc.reference.collection("measures").get();
+      }).toList());
+    }).then((measureSnapshots) {
+      return measureSnapshots.expand((snapshot) {
+        return (snapshot.docs.single.data()['measures'] as List).map((e) {
+          return MeasureDTO.fromJson(e as Map<String, dynamic>);
+        }).toList();
+      }).toList();
+    });
   }
 
   Future<void> updateFood(Food food) async {
     userRef()
         .collection('foods')
         .doc(food.id)
-        .withConverter(
-          fromFirestore: Food.fromFirestore,
-          toFirestore: ((Food food, options) => food.toFirestore()),
-        )
         .update({
       "name": food.name,
       "amount": food.amount,
-      "type": food.type.index
-    }).then((_) {});
+      "type": food.type.index,
+      if (food.selectedMeasure != null) 
+        "selectedMeasure.label": food.selectedMeasure!.label,
+      if (food.selectedMeasure != null) 
+        "selectedMeasure.weight": food.selectedMeasure!.weight,
+      
+
+    });
   }
 
   Future<void> updateStats(
@@ -115,7 +144,9 @@ class FirestoreService {
   }
 
   Stream<QuerySnapshot<Food>> getFoods(DateTime date) {
-    DateTime endOfDay = date.add(const Duration(days: 1)).subtract(const Duration(milliseconds: 1));
+    DateTime endOfDay = date
+        .add(const Duration(days: 1))
+        .subtract(const Duration(milliseconds: 1));
 
     return userRef()
         .collection('foods')

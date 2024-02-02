@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/api/api_service.dart';
 import 'package:protein_tracker/data/firestore.dart';
+import 'package:protein_tracker/data/models/food_response.dart';
 import 'package:protein_tracker/data/models/nutrients_request.dart';
 import 'package:protein_tracker/data/models/search_result.dart';
 import 'package:protein_tracker/ui/food_details/food_details.dart';
@@ -115,4 +116,7 @@ class FoodRepository {
           as FoodDetails;
     }).onError((error, _) => FoodDetails.error);
   }
+
+  Future<List<MeasureDTO>> getMeasures(String foodId) => firestoreService.getMeasures(foodId);
+
 }
