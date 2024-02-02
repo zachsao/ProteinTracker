@@ -22,14 +22,22 @@ class DailyPage extends StatefulWidget {
 }
 
 class DailyState extends State<DailyPage> {
+  late TextEditingController editGoalController;
   void logEvent() async {
     await FirebaseAnalytics.instance.logScreenView(screenName: "Daily page");
   }
 
   @override
   void initState() {
+    editGoalController = TextEditingController();
     logEvent();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    editGoalController.dispose();
+    super.dispose();
   }
 
   @override
@@ -51,7 +59,8 @@ class DailyState extends State<DailyPage> {
                 child: CircularProgressIndicator(),
               );
             }
-            var foods = snapshot.data!.docs.map((e) => e.data()! as Food).toList();
+            var foods =
+                snapshot.data!.docs.map((e) => e.data()! as Food).toList();
 
             var total = foods.map((e) => e.amount).sum;
             var meals = foods.groupListsBy((element) => element.type);
@@ -96,8 +105,15 @@ class DailyState extends State<DailyPage> {
                   total: total,
                   goal: widget.repository.getDailyGoal(),
                 ),
-                UpdateGoalDialog(
-                  updateGoal: widget.repository.updateDailyGoal,
+                TextButton(
+                  onPressed: () => showDialog(context: context, builder: (context){
+                    return UpdateGoalDialog(
+                      updateGoal: (goal) {
+                        widget.repository.updateDailyGoal(goal);
+                      },
+                    );
+                  }),
+                  child: const Text(Strings.editGoalButton),
                 ),
                 const SizedBox(height: 32),
                 buildSectionsList(orderedMeals)
@@ -187,8 +203,7 @@ class DailyState extends State<DailyPage> {
                       child: FoodEdit(
                           food: food,
                           updateEntry: (food, oldFood) async {
-                            await widget.repository
-                                .updateFood(food, oldFood);
+                            await widget.repository.updateFood(food, oldFood);
                             if (context.mounted) Navigator.pop(context);
                           }),
                     ));

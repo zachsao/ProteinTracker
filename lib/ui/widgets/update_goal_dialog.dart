@@ -11,61 +11,39 @@ class UpdateGoalDialog extends StatefulWidget {
 }
 
 class _UpdateGoalDialogState extends State<UpdateGoalDialog> {
-  late TextEditingController _textController;
-
-  @override
-  void initState() {
-    super.initState();
-    _textController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
-  }
+  final TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showUpdateDialog(context),
-      child: const Text(Strings.editGoalButton),
+    return AlertDialog(
+      title: const Text(Strings.updateGoal),
+      content: TextField(
+        autofocus: true,
+        controller: _textController,
+        keyboardType: TextInputType.number,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          labelText: Strings.dailyGoalHint,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text(Strings.cancel),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: const Text(Strings.saveButton),
+          onPressed: () {
+            if (_textController.text.isNotEmpty) {
+              widget.updateGoal(int.parse(_textController.text));
+            }
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
-  }
-
-  Future<void> showUpdateDialog(BuildContext context) async {
-    return showDialog<void>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("Update daily goal"),
-            content: TextField(
-              controller: _textController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                labelText: "Daily goal (g)",
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  if (_textController.text.isNotEmpty) {
-                    widget.updateGoal(int.parse(_textController.text));
-                  }
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
   }
 }

@@ -12,4 +12,7 @@ class Strings {
   static const String errorAmountNotInteger = "Amount must be an integer";
   static const String searchResultsEmpty = "No results found, try something else.";
   static const String searchHint = "Search foods";
+  static const String cancel = "Cancel";
+  static const String updateGoal = "Update dialy goal";
+  static const String dailyGoalHint = "Daily goal (g)";
 }
