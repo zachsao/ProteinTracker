@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/constants/strings.dart';
 import 'package:protein_tracker/ui/daily/food_edit.dart';
 import 'package:protein_tracker/data/models/date_model.dart';
@@ -14,15 +15,15 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:provider/provider.dart';
 
 class DailyPage extends StatefulWidget {
-  final FoodRepository repository;
 
-  const DailyPage({Key? key, required this.repository}) : super(key: key);
+  const DailyPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DailyState();
 }
 
 class DailyState extends State<DailyPage> {
+  final repository = GetIt.I.get<FoodRepository>();
   late TextEditingController editGoalController;
 
   void logEvent() async {
@@ -47,7 +48,7 @@ class DailyState extends State<DailyPage> {
     return Consumer<DateModel>(
       builder: (context, dateModel, child) {
         return StreamBuilder<QuerySnapshot>(
-          stream: widget.repository.getFoods(dateModel.date),
+          stream: repository.getFoods(dateModel.date),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -105,7 +106,7 @@ class DailyState extends State<DailyPage> {
                 const SizedBox(height: 16),
                 AmountProgress(
                   total: total,
-                  goal: widget.repository.getDailyGoal(),
+                  goal: repository.getDailyGoal(),
                 ),
                 TextButton(
                   onPressed: () => showDialog(
@@ -113,7 +114,7 @@ class DailyState extends State<DailyPage> {
                       builder: (context) {
                         return UpdateGoalDialog(
                           updateGoal: (goal) {
-                            widget.repository.updateDailyGoal(goal);
+                            repository.updateDailyGoal(goal);
                           },
                         );
                       }),
@@ -161,7 +162,7 @@ class DailyState extends State<DailyPage> {
     return Dismissible(
       key: Key(food.id!),
       onDismissed: (direction) {
-        widget.repository.delete(food, date);
+        repository.delete(food, date);
       },
       direction: DismissDirection.endToStart,
       background: Container(
@@ -188,7 +189,7 @@ class DailyState extends State<DailyPage> {
                 builder: (context) => FoodDetailsScreen(
                   food: food,
                   addFood: (updatedFood) async {
-                    await widget.repository.updateFood(updatedFood, food, date);
+                    await repository.updateFood(updatedFood, food, date);
                     if (context.mounted) Navigator.pop(context);
                   },
                 ),
@@ -210,7 +211,7 @@ class DailyState extends State<DailyPage> {
                       child: FoodEdit(
                           food: food,
                           updateEntry: (food, oldFood) async {
-                            await widget.repository
+                            await repository
                                 .updateFood(food, oldFood, date);
                             if (context.mounted) Navigator.pop(context);
                           }),

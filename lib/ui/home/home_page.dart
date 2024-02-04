@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 
 class HomeState extends State<HomePage> {
   int selectedIndex = 0;
-  FoodRepository repository = FoodRepository();
 
   void _onItemTap(int index) {
     setState(() {
@@ -25,7 +24,7 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> bottomBarItems =
-        Screen.screens(repository).map((screen) {
+        Screen.screens().map((screen) {
       return BottomNavigationBarItem(
           icon: Icon(screen.icon), label: screen.label);
     }).toList();
@@ -39,13 +38,13 @@ class HomeState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: Screen.screens(repository)[selectedIndex].content,
+                child: Screen.screens()[selectedIndex].content,
               ),
             ),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: PeachyFab(addFood: repository.addFood),
+          floatingActionButton: PeachyFab(),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             selectedItemColor: Theme.of(context).colorScheme.secondary,

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/models/date_model.dart';
 import 'package:protein_tracker/data/models/weekly_stats.dart';
 import 'package:protein_tracker/ui/weekly/intake_tile.dart';
@@ -14,14 +15,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
 class WeeklyPage extends StatefulWidget {
-  final FoodRepository repository;
-  const WeeklyPage({Key? key, required this.repository}) : super(key: key);
+  const WeeklyPage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => WeeklyState();
 }
 
 class WeeklyState extends State<WeeklyPage> {
+  final repository = GetIt.I.get<FoodRepository>();
   int streak = 0;
 
   void logEvent() async {
@@ -31,7 +32,7 @@ class WeeklyState extends State<WeeklyPage> {
   @override
   void initState() {
     logEvent();
-    widget.repository.getStreak().then((value) => streak = value);
+    repository.getStreak().then((value) => streak = value);
     super.initState();
   }
 
@@ -128,7 +129,7 @@ class WeeklyState extends State<WeeklyPage> {
               ],
             );
           },
-          future: widget.repository.getWeeklyData(dateModel.date),
+          future: repository.getWeeklyData(dateModel.date),
         );
       }
     );

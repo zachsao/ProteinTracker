@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:protein_tracker/data/food_repository.dart';
 import 'package:protein_tracker/data/models/date_model.dart';
 import 'package:protein_tracker/ui/widgets/add_food.dart';
 import 'package:provider/provider.dart';
@@ -7,10 +9,8 @@ import 'package:provider/provider.dart';
 import '../../data/models/food.dart';
 
 class PeachyFab extends StatefulWidget {
-  final Function addFood;
   const PeachyFab({
     Key? key,
-    required this.addFood,
   }) : super(key: key);
 
   @override
@@ -18,18 +18,15 @@ class PeachyFab extends StatefulWidget {
 }
 
 class _PeachyFabState extends State<PeachyFab> {
-  Future<void> addFood(Food newFood) async {
-    widget.addFood(newFood);
-  }
 
   void goToAddFood(BuildContext context) {
-    Timestamp createdAt =
-        Provider.of<DateModel>(context, listen: false).timestamp;
+    DateModel dateModel = Provider.of<DateModel>(context, listen: false);
+    Timestamp createdAt = dateModel.timestamp;
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => AddFood(
           addFood: (food) async {
-            await addFood(food.copyWith(createdAt: createdAt));
+            await GetIt.I.get<FoodRepository>().addFood(food.copyWith(createdAt: createdAt), dateModel.date);
             if (context.mounted) Navigator.popUntil(context, (route) => route.isFirst);
           },
         ),

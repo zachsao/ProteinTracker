@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:protein_tracker/data/food_repository.dart';
 import 'package:protein_tracker/ui/daily/daily_page.dart';
 import 'package:protein_tracker/ui/weekly/weekly_page.dart';
 
@@ -10,10 +9,10 @@ class Screen {
 
   Screen({required this.icon, required this.label, required this.content});
 
-  static List<Screen> screens(FoodRepository repository) {
+  static List<Screen> screens() {
       return [
-        Screen(icon: Icons.home_outlined, label: "Daily", content: DailyPage(repository: repository,)),
-        Screen(icon: Icons.list_alt, label: "Weekly", content: WeeklyPage(repository: repository,))
+        Screen(icon: Icons.home_outlined, label: "Daily", content: DailyPage()),
+        Screen(icon: Icons.list_alt, label: "Weekly", content: WeeklyPage())
       ];
   }
 }
