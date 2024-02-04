@@ -116,7 +116,4 @@ class FoodRepository {
           as FoodDetails;
     }).onError((error, _) => FoodDetails.error);
   }
-
-  Future<List<MeasureDTO>> getMeasures(String foodId) => firestoreService.getMeasures(foodId);
-
 }

@@ -29,25 +29,6 @@ class FirestoreService {
         .add(food);
   }
 
-  // Get the measures list from the subcollection
-  Future<List<MeasureDTO>> getMeasures(String foodId) {
-    return userRef()
-        .collection('foods')
-        .where("id", isEqualTo: foodId)
-        .get()
-        .then((querySnapshot) {
-      return Future.wait(querySnapshot.docs.map((doc) {
-        return doc.reference.collection("measures").get();
-      }).toList());
-    }).then((measureSnapshots) {
-      return measureSnapshots.expand((snapshot) {
-        return (snapshot.docs.single.data()['measures'] as List).map((e) {
-          return MeasureDTO.fromJson(e as Map<String, dynamic>);
-        }).toList();
-      }).toList();
-    });
-  }
-
   Future<void> updateFood(Food food) async {
     userRef().collection('foods').doc(food.id).update({
       "amount": food.amount,
