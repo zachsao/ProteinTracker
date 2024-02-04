@@ -1,14 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../data/models/food.dart';
-import 'package:intl/intl.dart';
 
 class WeeklyChart extends StatelessWidget {
-  final List<Food> foods;
+  final Map<String, int> groupedTotals;
 
-  const WeeklyChart({super.key, required this.foods});
+  const WeeklyChart({super.key, required this.groupedTotals});
 
   List<ColumnSeries<DailyTotal, String>> createChartData(BuildContext context) {
     Map<String, int> days = {
@@ -16,10 +12,6 @@ class WeeklyChart extends StatelessWidget {
     };
 
     List<DailyTotal> dailyTotals = [];
-    Map<String, int> groupedTotals = foods
-        .groupListsBy((element) => dayFromTimestamp(element.createdAt!))
-        .map((timestamp, foods) =>
-            MapEntry(timestamp, foods.map((e) => e.amount).toList().sum));
 
     days.addAll(groupedTotals);
     days.forEach((key, value) {
@@ -34,10 +26,6 @@ class WeeklyChart extends StatelessWidget {
           name: 'Gold',
           color: Theme.of(context).colorScheme.primary)
     ];
-  }
-
-  String dayFromTimestamp(Timestamp timestamp) {
-    return DateFormat('EEE').format(timestamp.toDate()).toUpperCase();
   }
 
   @override

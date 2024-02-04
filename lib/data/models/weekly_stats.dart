@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'food.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 class WeeklyStats {
   int dailyAvg = 0;
   int streak = 0;
   Map<MealType, int> avgPerMeal =
       MealType.values.asMap().map((key, value) => MapEntry(value, 0));
+  Map<String, int> groupedTotals = {};
 
   WeeklyStats(List<Food> foods) {
     if (foods.isNotEmpty) {
@@ -26,6 +30,15 @@ class WeeklyStats {
         }
       }
       dailyAvg = dailyAmounts.values.average.round();
+
+      groupedTotals = foods
+          .groupListsBy((element) => dayFromTimestamp(element.createdAt!))
+          .map((timestamp, foods) =>
+          MapEntry(timestamp, foods.map((e) => e.amount).toList().sum));
     }
+  }
+
+  String dayFromTimestamp(Timestamp timestamp) {
+    return DateFormat('EEE').format(timestamp.toDate()).toUpperCase();
   }
 }

@@ -6,6 +6,7 @@ import 'package:protein_tracker/data/firestore.dart';
 import 'package:protein_tracker/data/models/food_response.dart';
 import 'package:protein_tracker/data/models/nutrients_request.dart';
 import 'package:protein_tracker/data/models/search_result.dart';
+import 'package:protein_tracker/data/models/weekly_stats.dart';
 import 'package:protein_tracker/ui/food_details/food_details.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
@@ -39,7 +40,7 @@ class FoodRepository {
     });
   }
 
-  Future<QuerySnapshot<Food>> getWeeklyData(DateTime currentDate) {
+  Future<WeeklyStats> getWeeklyData(DateTime currentDate) {
     return firestoreService.getWeeklyData(currentDate);
   }
 

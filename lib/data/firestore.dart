@@ -3,6 +3,8 @@ import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/data/models/food.dart';
 
+import 'models/weekly_stats.dart';
+
 class FirestoreService {
   FirestoreService init() {
     FirebaseFirestore.instance.settings = const Settings(
@@ -140,16 +142,22 @@ class FirestoreService {
     await userRef().collection('foods').doc(food.id!).delete();
   }
 
-  Future<QuerySnapshot<Food>> getWeeklyData(DateTime currentDate) {
-    DateTime weekStart = currentDate
-        .subtract(Duration(days: currentDate.weekday - 1));
+  Future<WeeklyStats> getWeeklyData(DateTime currentDate) {
+    DateTime weekStart =
+        currentDate.subtract(Duration(days: currentDate.weekday - 1));
     return userRef()
         .collection('foods')
         .where("createdAt", isGreaterThan: Timestamp.fromDate(weekStart))
         .withConverter(
             fromFirestore: Food.fromFirestore,
             toFirestore: ((Food food, options) => food.toFirestore()))
-        .get();
+        .get()
+        .then(
+      (value) {
+        List<Food> foods = value.docs.map((e) => e.data()).toList();
+        return WeeklyStats(foods);
+      },
+    );
   }
 
   Future<int> getStreak() async {
