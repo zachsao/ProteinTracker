@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 class DailyPage extends StatefulWidget {
   final FoodRepository repository;
+
   const DailyPage({Key? key, required this.repository}) : super(key: key);
 
   @override
@@ -23,6 +24,7 @@ class DailyPage extends StatefulWidget {
 
 class DailyState extends State<DailyPage> {
   late TextEditingController editGoalController;
+
   void logEvent() async {
     await FirebaseAnalytics.instance.logScreenView(screenName: "Daily page");
   }
@@ -106,17 +108,19 @@ class DailyState extends State<DailyPage> {
                   goal: widget.repository.getDailyGoal(),
                 ),
                 TextButton(
-                  onPressed: () => showDialog(context: context, builder: (context){
-                    return UpdateGoalDialog(
-                      updateGoal: (goal) {
-                        widget.repository.updateDailyGoal(goal);
-                      },
-                    );
-                  }),
+                  onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) {
+                        return UpdateGoalDialog(
+                          updateGoal: (goal) {
+                            widget.repository.updateDailyGoal(goal);
+                          },
+                        );
+                      }),
                   child: const Text(Strings.editGoalButton),
                 ),
                 const SizedBox(height: 32),
-                buildSectionsList(orderedMeals)
+                buildSectionsList(orderedMeals, dateModel.date)
               ],
             );
           },
@@ -125,7 +129,7 @@ class DailyState extends State<DailyPage> {
     );
   }
 
-  Widget buildSectionsList(Map<MealType, List<Food>> meals) {
+  Widget buildSectionsList(Map<MealType, List<Food>> meals, DateTime date) {
     return Expanded(
         child: ListView.builder(
             itemCount: meals.length,
@@ -133,12 +137,15 @@ class DailyState extends State<DailyPage> {
               MealType type = meals.keys.toList()[index];
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [buildSection(meals[type] ?? [], type.name, context)],
+                children: [
+                  buildSection(meals[type] ?? [], type.name, context, date)
+                ],
               );
             }));
   }
 
-  Widget buildSection(List<Food> foods, String header, BuildContext context) {
+  Widget buildSection(
+      List<Food> foods, String header, BuildContext context, DateTime date) {
     return CupertinoListSection.insetGrouped(
       backgroundColor: Theme.of(context).colorScheme.background,
       header: Text(
@@ -146,15 +153,15 @@ class DailyState extends State<DailyPage> {
         style:
             TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
-      children: foods.map((food) => buildItem(food)).toList(),
+      children: foods.map((food) => buildItem(food, date)).toList(),
     );
   }
 
-  Widget buildItem(Food food) {
+  Widget buildItem(Food food, DateTime date) {
     return Dismissible(
       key: Key(food.id!),
       onDismissed: (direction) {
-        widget.repository.delete(food);
+        widget.repository.delete(food, date);
       },
       direction: DismissDirection.endToStart,
       background: Container(
@@ -181,7 +188,7 @@ class DailyState extends State<DailyPage> {
                 builder: (context) => FoodDetailsScreen(
                   food: food,
                   addFood: (updatedFood) async {
-                    await widget.repository.updateFood(updatedFood, food);
+                    await widget.repository.updateFood(updatedFood, food, date);
                     if (context.mounted) Navigator.pop(context);
                   },
                 ),
@@ -203,7 +210,8 @@ class DailyState extends State<DailyPage> {
                       child: FoodEdit(
                           food: food,
                           updateEntry: (food, oldFood) async {
-                            await widget.repository.updateFood(food, oldFood);
+                            await widget.repository
+                                .updateFood(food, oldFood, date);
                             if (context.mounted) Navigator.pop(context);
                           }),
                     ));

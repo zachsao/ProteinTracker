@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:protein_tracker/data/auth.dart';
 import 'package:protein_tracker/data/models/food.dart';
-import 'package:protein_tracker/data/models/food_response.dart';
 
 class FirestoreService {
   FirestoreService init() {
@@ -40,8 +40,8 @@ class FirestoreService {
     });
   }
 
-  Future<void> updateStats(
-      Food food, Food? oldFood, int goal, FirestoreOperation operation) async {
+  Future<void> updateStats(Food food, Food? oldFood, int goal,
+      FirestoreOperation operation, DateTime currentDate) async {
     var statsCollection = userRef().collection('stats');
     // set or update today's total amount
     int amount;
@@ -57,7 +57,7 @@ class FirestoreService {
         break;
     }
 
-    await statsCollection.doc("${today()}").set(
+    await statsCollection.doc("$currentDate").set(
       {"total": FieldValue.increment(amount)},
       SetOptions(merge: true),
     );
@@ -141,8 +141,9 @@ class FirestoreService {
     await userRef().collection('foods').doc(food.id!).delete();
   }
 
-  Future<QuerySnapshot<Food>> getWeeklyData() {
-    DateTime weekStart = today().subtract(Duration(days: today().weekday - 1));
+  Future<QuerySnapshot<Food>> getWeeklyData(DateTime currentDate) {
+    DateTime weekStart = DateUtils.dateOnly(currentDate)
+        .subtract(Duration(days: today().weekday - 1));
     return userRef()
         .collection('foods')
         .where("createdAt", isGreaterThan: Timestamp.fromDate(weekStart))
