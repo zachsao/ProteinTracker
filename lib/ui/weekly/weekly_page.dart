@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../data/auth.dart';
 import '../../data/food_repository.dart';
 import '../../data/models/food.dart';
+import '../widgets/date_selector.dart';
 
 class WeeklyPage extends StatefulWidget {
   const WeeklyPage({Key? key}) : super(key: key);
@@ -57,18 +58,14 @@ class WeeklyState extends State<WeeklyPage> {
 
           return ListView(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Your weekly intake",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
+            DateSelector(
+            formattedDate: dateModel.formattedWeek,
+            backwardPressed: () => dateModel.setDate(
+                dateModel.date.subtract(const Duration(days: 7))),
+            forwardPressed: () => dateModel.setDate(
+                dateModel.date.add(const Duration(days: 7))),
+            isForwardVisible: dateModel.isBeforeThisWeek(),
+          ),
               const SizedBox(
                 height: 32,
               ),

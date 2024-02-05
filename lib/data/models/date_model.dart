@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class DateModel extends ChangeNotifier {
   DateTime date;
   DateTime get today => DateUtils.dateOnly(DateTime.now());
+  Timestamp get timestamp => Timestamp.fromDate(date);
 
   DateModel(this.date);
 
@@ -21,5 +22,14 @@ class DateModel extends ChangeNotifier {
     }
   }
 
-  Timestamp get timestamp => Timestamp.fromDate(date);
+  String get formattedWeek {
+    DateTime start = date.subtract(Duration(days: date.weekday - 1));
+    DateTime end = start.add(const Duration(days: 6));
+    return '${DateFormat('d MMM.').format(start)} - ${DateFormat('d MMM.').format(end)}';
+  }
+
+  bool isBeforeThisWeek() {
+    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+    return date.isBefore(startOfWeek);
+  }
 }

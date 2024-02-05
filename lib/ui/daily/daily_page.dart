@@ -14,6 +14,8 @@ import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/date_selector.dart';
+
 class DailyPage extends StatefulWidget {
 
   const DailyPage({Key? key}) : super(key: key);
@@ -73,35 +75,13 @@ class DailyState extends State<DailyPage> {
             return Column(
               children: [
                 const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        dateModel.setDate(
-                            dateModel.date.subtract(const Duration(days: 1)));
-                      },
-                    ),
-                    Text(
-                      dateModel.formattedDate,
-                      style: Theme.of(context).textTheme.titleLarge,
-                      textAlign: TextAlign.center,
-                    ),
-                    Visibility(
-                      maintainSize: true,
-                      maintainAnimation: true,
-                      maintainState: true,
-                      visible: dateModel.date.isBefore(dateModel.today),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_forward_ios),
-                        onPressed: () {
-                          dateModel.setDate(
-                              dateModel.date.add(const Duration(days: 1)));
-                        },
-                      ),
-                    ),
-                  ],
+                DateSelector(
+                  formattedDate: dateModel.formattedDate,
+                  backwardPressed: () => dateModel.setDate(
+                      dateModel.date.subtract(const Duration(days: 1))),
+                  forwardPressed: () => dateModel.setDate(
+                      dateModel.date.add(const Duration(days: 1))),
+                  isForwardVisible: dateModel.date.isBefore(dateModel.today),
                 ),
                 const SizedBox(height: 16),
                 AmountProgress(

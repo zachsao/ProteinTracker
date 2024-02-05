@@ -148,6 +148,9 @@ class FirestoreService {
     return userRef()
         .collection('foods')
         .where("createdAt", isGreaterThan: Timestamp.fromDate(weekStart))
+        .where("createdAt",
+            isLessThan:
+                Timestamp.fromDate(weekStart.add(const Duration(days: 7))))
         .withConverter(
             fromFirestore: Food.fromFirestore,
             toFirestore: ((Food food, options) => food.toFirestore()))
