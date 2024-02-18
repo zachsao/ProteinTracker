@@ -564,4 +564,4 @@ $RECYCLE.BIN/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 .flutter-plugins-dependencies
-/lib/secrets.dart
+*.env
