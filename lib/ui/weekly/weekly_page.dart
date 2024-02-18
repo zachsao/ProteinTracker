@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+import 'package:protein_tracker/constants/strings.dart';
 import 'package:protein_tracker/data/models/date_model.dart';
 import 'package:protein_tracker/data/models/weekly_stats.dart';
 import 'package:protein_tracker/ui/weekly/intake_tile.dart';
@@ -28,6 +29,73 @@ class WeeklyState extends State<WeeklyPage> {
 
   void logEvent() async {
     await FirebaseAnalytics.instance.logScreenView(screenName: "Login page");
+  }
+
+  Future<void> attemptDelete(
+      Function onDeleteSuccessful, Function(String) onDeleteFailed) {
+    return Auth.get().deleteUser().then((value) {
+      if (value.isEmpty) {
+        onDeleteSuccessful();
+      } else {
+        onDeleteFailed(value);
+      }
+    });
+  }
+
+  Future confirmDelete() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(Strings.deleteAccountPromptTitle),
+          content: const Text(Strings.deleteAccountPromptContent),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(Strings.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                attemptDelete(() {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Account deleted"),
+                    ),
+                  );
+                }, (String message) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 5),
+                      content: Text(message),
+                      action: SnackBarAction(
+                          label: "Re-authenticate",
+                          onPressed: () {
+                            Auth.get().authenticateThenDelete((){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text("Account deleted"),
+                                ),
+                              );
+                            });
+                          }),
+                    ),
+                  );
+                });
+              },
+              child: Text(
+                "Delete",
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -58,14 +126,14 @@ class WeeklyState extends State<WeeklyPage> {
 
           return ListView(
             children: [
-            DateSelector(
-            formattedDate: dateModel.formattedWeek,
-            backwardPressed: () => dateModel.setDate(
-                dateModel.date.subtract(const Duration(days: 7))),
-            forwardPressed: () => dateModel.setDate(
-                dateModel.date.add(const Duration(days: 7))),
-            isForwardVisible: dateModel.isBeforeThisWeek(),
-          ),
+              DateSelector(
+                formattedDate: dateModel.formattedWeek,
+                backwardPressed: () => dateModel
+                    .setDate(dateModel.date.subtract(const Duration(days: 7))),
+                forwardPressed: () => dateModel
+                    .setDate(dateModel.date.add(const Duration(days: 7))),
+                isForwardVisible: dateModel.isBeforeThisWeek(),
+              ),
               const SizedBox(
                 height: 32,
               ),
@@ -122,25 +190,21 @@ class WeeklyState extends State<WeeklyPage> {
                     const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
                 child: OutlinedButton(
                   onPressed: () => Auth.get().signOut(),
-                  child: const Text(
-                    "Sign out",
-                  ),
+                  child: const Text(Strings.signOut),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: OutlinedButton(
-                  onPressed: () => Auth.get().deleteUser(),
+                child: TextButton(
+                  onPressed: () => confirmDelete(),
                   child: Text(
-                    "Delete account",
+                    Strings.deleteAccount,
                     style:
                         TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 32,
-              )
+              const SizedBox(height: 32)
             ],
           );
         },
